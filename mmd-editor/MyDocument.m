@@ -129,12 +129,13 @@
 	return aStr;
 }
 
-- (IBAction)copyHTMLAction:(id)sender;
+- (IBAction)previewHTMLAction:(id)sender;
 {
 //	NSLog(@"creating preview");
 	
-	[[NSPasteboard generalPasteboard] clearContents];
-	[[NSPasteboard generalPasteboard] setString:[self htmlForText] forType:NSStringPboardType];
+	[previewPanel makeKeyAndOrderFront:nil];
+	[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
+	
 }
 
 @end

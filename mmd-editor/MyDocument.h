@@ -8,6 +8,8 @@
 
 
 #import <Cocoa/Cocoa.h>
+#import <WebKit/WebKit.h>
+
 #import "HGMarkdownHighlighter.h"
 
 @interface MyDocument: NSDocument
@@ -16,10 +18,13 @@
     NSAttributedString *mString;
 
 	HGMarkdownHighlighter *hl;
+	
+	IBOutlet NSPanel *previewPanel;
+	IBOutlet WebView *previewView;
 }
 
 - (NSAttributedString *) string;
 - (void) setString: (NSAttributedString *) value;
 - (NSString *)htmlForText;
-- (IBAction)copyHTMLAction:(id)sender;
+- (IBAction)previewHTMLAction:(id)sender;
 @end
