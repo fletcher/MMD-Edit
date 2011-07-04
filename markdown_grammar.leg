@@ -677,7 +677,7 @@ DoubleQuoted =  DoubleQuoteStart
 NoteReference = &{ EXT(EXT_NOTES) }
                 RawNoteReference
 
-RawNoteReference = "[^" ( !Newline !']' . )+ ']'
+RawNoteReference = ( "[^" | "[#" ) ( !Newline !']' . )+ ']'
 
 Note =          &{ EXT(EXT_NOTES) }
                 NonindentSpace RawNoteReference ':' Sp
