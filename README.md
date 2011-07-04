@@ -1,83 +1,71 @@
+# MMD-Editor #
 
-PEG Markdown Highlight
-========================
+This project creates a Mac OS X text editor that performs syntax-highlighting
+for MultiMarkdown documents.
 
+It based on work by Ali Rantakari:
 
-Description
--------------------------------------------------------------------------------
+<http://hasseg.org/peg-markdown-highlight/>
 
-This project contains:
-
-- A Markdown parser for syntax highlighting, written in C. The parser itself
-  should compile as is on OS X, Linux and Windows (at least).
-- Helper classes for syntax highlighting `NSTextView`s in Cocoa applications.
-- A simple example on how to highlight a `GtkTextView` in a GTK+ application.
-- A simple example on how to highlight a `QTextEdit` in a Qt application.
-
-_Copyright 2011 Ali Rantakari_ -- <http://hasseg.org>
-
-This program uses the PEG grammar from John MacFarlane's `peg-markdown` project,
-and the `greg` parser generator by Why The Lucky Stiff and Amos Wenger (`greg`
-is heavily based on `peg/leg` by Ian Piumarta). It also contains an
-implementation of the merge sort algorithm for linked lists by Simon Tatham.
-
-Thanks to these gentlemen (and everyone who contributed to their projects) for
-making this one possible.
-
-_See the `LICENSE` file for licensing information._
+It uses a PEG grammar based on that from MultiMarkdown (aka
+[peg-multimarkdown](https://github.com/fletcher/peg-multimarkdown)), which
+was, in turn, derived from John MacFarlane's
+[peg-markdown](https://github.com/jgm/peg-markdown).
 
 
+## Screenshot ##
 
-API Documentation
--------------------------------------------------------------------------------
-
-The public APIs are documented using [Doxygen][dox]. If you have it installed,
-just run `make docs` and they should be available under the `docs/` directory.
-
-[dox]: http://doxygen.org
+![screenshot](http://fletcherpenney.net/2011/06/mmd-editor.png)
 
 
+## Status ##
 
-Using the Parser in Your Application
--------------------------------------------------------------------------------
+This is very much a work in progress --- it matches the basic Markdown syntax,
+and I am adding in support for MMD specific features. Short of editing the
+code, there is no way (yet) to change the colors, fonts, etc.
 
-The parser has been written in ANSI/ISO C89 with GNU extensions, which means
-that you need a _GCC-compatible compiler_ (see section on MSVC below, though).
-You also need _Bourne Shell_ and some common Unix utilities due to a utility
-shell script that is used to combine some files in a `make` step.
+Currently, this app is more "proof of concept" than finished project. But it
+seems to work.
 
+Features I would like to see added:
 
-### Files You Need
+* support for all MMD syntax
 
-You need to add the following files into your project:
+* an innovative way to support tables that simulates [elastic
+  tabstops](http://nickgravgaard.com/elastictabstops/) to make tables look
+  better
 
-- `markdown_definitions.h`
-- `markdown_parser.h`
-- `markdown_parser.c`
+* Preference pane with the ability to:
+	* change colors/fonts/etc
+	* change default file extension
 
-`markdown_parser.c` implements the parser and must be generated with `make`.
-`markdown_parser.h` contains the parser's public interface and
-`markdown_definitions.h` some public definitions you might want to use in files
-where you don't wish to import the parser interface itself.
+* built-in support for HTML preview and ability to run MMD to export:
+	* HTML
+	* LaTeX
+	* OPML
+	* FODT
+	* etc
 
-
-### Compiling in Microsoft Visual C++
-
-First you need to generate `markdown_parser.c` somehow. There are two main
-ways to do this:
-
-- Use a Linux or OS X machine to generate it
-- Generate it on Windows using MinGW (you'd run `make` in the MinGW shell)
-
-Whichever way you go, the command you run is `make markdown_parser.c`.
-
-MSVC does not support some of the GNU extensions the code uses, but it should
-compile it nicely as C++ (just change the extensions to `.cpp` or set some
-magic switch in the project settings to get the same effect). You may need to
-insert the following to the beginning of `markdown_parser.c`:
-
-    #include "stdafx.h"
+This app will never support as many features/bundles/etc as something like
+[TextMate](http://macromates.com/), but when combined with something like
+[TextExpander](http://www.smilesoftware.com/TextExpander/), it can actually be
+a very useful program for those who use MultiMarkdown.
 
 
+## Compiling ##
+
+To compile, you must be using Mac OS X, with Developers Tools installed.
+
+from the MMD-Editor directory, type:
+
+	make markdown_parser.c
+
+Then open `mmd-editor/mmd-editor.xcodeproj`, change the configuration to
+"Release | x86_64" in the upper left, and build.
 
 
+## Contributions ##
+
+I welcome contributions from other developers to help improve this
+application. Obviously, it has a lot of potential, but there's a long way to
+go.
