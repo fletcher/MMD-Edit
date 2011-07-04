@@ -50,6 +50,9 @@ typedef enum
 	REFERENCE,			/**< Reference */
 	NOTE,				/**< Note */
 	
+	/* MultiMarkdown Stuff */
+	METADATA,
+	
 	/* Utility types used by the parser itself: */
 	RAW_LIST,	/* List of RAW element lists, each to be processed separately from others
 				 * (for each element in linked lists of this type, `children` points
@@ -68,7 +71,7 @@ typedef enum
 * \brief Number of types in element_type.
 * \sa element_type
 */
-#define NUM_TYPES 30
+#define NUM_TYPES 31
 
 /**
 * \brief Number of *language element* types in element_type.

@@ -29,6 +29,7 @@ markdown_parser_core.c : markdown_grammar.leg $(GREG)
 markdown_parser.c : markdown_parser_core.c markdown_parser_head.c markdown_parser_foot.c tools/combine_parser_files.sh
 	@echo '------- combining parser code'
 	./tools/combine_parser_files.sh > $@
+	cp markdown_parser.c mmd-editor/markdown_parser.c
 
 markdown_parser.o : markdown_parser.c markdown_parser.h markdown_definitions.h
 	@echo '------- building markdown_parser.o'

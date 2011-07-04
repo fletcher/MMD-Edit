@@ -7,6 +7,10 @@
  * 
  * This is a slightly adapted version of the PEG grammar from John MacFarlane's
  * peg-markdown compiler.
+
+ * It's also modified by Fletcher T. Penney
+	to support the MultiMarkdown grammar
+	http://fletcherpenney.net/mmd/
  */
 
 /// header_code_here
@@ -26,7 +30,8 @@
 
 %}
 
-Doc =       ( Block )*
+Doc =       ( &( MetaDataKey Sp ':' Sp (!Newline)) MetaData )?
+			( Block )*
 
 # placeholder for marking locations
 LocMarker = &. { $$ = elem(NO_TYPE); }
@@ -682,6 +687,27 @@ InlineNote =    &{ EXT(EXT_NOTES) }
                 "^["
                 ( !']' Inline )+
                 ']'
+
+# MultiMarkdown additions
+
+MetaData =  s:LocMarker
+			!([A-Za-z]+ "://")
+            (MetaDataKeyValue )+
+	        { ADD(elem_s(METADATA)); }
+	        
+
+MetaDataKeyValue = a:MetaDataKey
+            Sp ':' Sp b:MetaDataValue
+
+MetaDataKey = < AlphanumericAscii ( Sp ( AlphanumericAscii | '_' | ' ' | '-')+)* >
+
+
+MetaDataValue = a:StartList
+                ((< (!Newline .)* > )
+                ((Newline &(!BlankLine !MetaDataKeyValue Sp RawLine))
+                     | Newline)
+                (!BlankLine !MetaDataKeyValue Sp RawLine )* )
+                
 
 # Not used anywhere in grammar:
 #Notes =         ( Note | SkipBlock )*
