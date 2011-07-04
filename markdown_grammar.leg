@@ -698,6 +698,7 @@ InlineNote =    &{ EXT(EXT_NOTES) }
 MetaData =  s:LocMarker
 			!([A-Za-z]+ "://")
             (MetaDataKeyValue )+
+			{ ADD(elem_s(METADATA)); }
 
 MetaDataKeyValue = a:MetaDataKey
             Sp ':' Sp b:MetaDataValue
@@ -706,11 +707,10 @@ MetaDataKey = < s:LocMarker AlphanumericAscii ( Sp ( AlphanumericAscii | '_' | '
 	{ ADD(elem_s(METAKEY)); }
 
 MetaDataValue = 
-                ((< (!Newline .)* > )
+                ((< s:LocMarker (!Newline .)* > )
                 ((Newline &(!BlankLine !MetaDataKeyValue Sp RawLine))
                      | Newline)
                 (!BlankLine !MetaDataKeyValue Sp RawLine )* )
-				
 
 
 ## Citations
