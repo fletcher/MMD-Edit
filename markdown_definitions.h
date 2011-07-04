@@ -55,6 +55,8 @@ typedef enum
 	
 	/* MultiMarkdown Stuff */
 	METADATA,
+	METAKEY,
+	METAVALUE,
 	CITATION,
 	FOOTNOTE,
 	MATHSPAN,
@@ -78,7 +80,7 @@ typedef enum
 * \brief Number of types in element_type.
 * \sa element_type
 */
-#define NUM_TYPES 35
+#define NUM_TYPES 37
 
 /**
 * \brief Number of *language element* types in element_type.
