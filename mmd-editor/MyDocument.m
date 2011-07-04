@@ -39,10 +39,11 @@
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
 	if ([self string] != nil) {
+	//	[textView setRulerVisible:TRUE];
 		[[textView textStorage] setAttributedString: [self string]];
-
+		
+		[textView setAlignment:NSJustifiedTextAlignment range:NSMakeRange(0, [[self string] length])];
 		[textView setFont:[NSFont fontWithName:@"courier" size:12]];
-
 		
 		hl = [[HGMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
