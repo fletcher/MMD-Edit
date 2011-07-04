@@ -47,6 +47,7 @@
 		hl = [[HGMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
+		hl.waitInterval = 0.3;
 		[hl activate];
 	}
 }
