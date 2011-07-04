@@ -387,6 +387,7 @@ Inlines  =  ( !Endline Inline
               | Endline &Inline )+ Endline?
 
 Inline  = Str
+		| MathSpan
         | Endline
         | UlOrStarLine
         | Space
@@ -396,7 +397,7 @@ Inline  = Str
         | Image
         | Link
         | NoteReference
- #       | InlineNote           # Not used in MultiMarkdown
+#       | InlineNote           # Not used in MultiMarkdown
         | Code
         | RawHtml
         | Entity
@@ -722,6 +723,13 @@ CitationReferenceSingle =  (( "[]" Spnl ref:RawCitationReference )
 
 RawCitationReference = "[#" < ( !Newline !']' . )+ > ']'
 
+## Math
+
+MathSpan = s:LocMarker
+	'\\' < (
+    ('\\[' (!'\\\\]' .)* '\\\\]') |
+    ('\\(' (!'\\\\)' .)* '\\\\)') ) >
+	{ ADD(elem_s(MATHSPAN)); }
 
 # Not used anywhere in grammar:
 #Notes =         ( Note | SkipBlock )*

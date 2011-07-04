@@ -48,6 +48,7 @@
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
+		hl.extensions = hl.extensions | EXT_SMART;
 		[hl activate];
 	}
 }
