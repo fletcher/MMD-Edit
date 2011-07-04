@@ -69,3 +69,10 @@ Then open `mmd-editor/mmd-editor.xcodeproj`, change the configuration to
 I welcome contributions from other developers to help improve this
 application. Obviously, it has a lot of potential, but there's a long way to
 go.
+
+
+## Downloading ##
+
+A compiled (though likely out of date) binary is available for download:
+
+<https://github.com/fletcher/MMD-Editor/downloads>
