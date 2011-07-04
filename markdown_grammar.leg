@@ -392,10 +392,11 @@ Inline  = Str
         | Space
         | Strong
         | Emph
+		| CitationReference
         | Image
         | Link
         | NoteReference
-        | InlineNote
+ #       | InlineNote           # Not used in MultiMarkdown
         | Code
         | RawHtml
         | Entity
@@ -690,24 +691,37 @@ InlineNote =    &{ EXT(EXT_NOTES) }
 
 # MultiMarkdown additions
 
+## Metadata
+
 MetaData =  s:LocMarker
 			!([A-Za-z]+ "://")
             (MetaDataKeyValue )+
 	        { ADD(elem_s(METADATA)); }
-	        
 
 MetaDataKeyValue = a:MetaDataKey
             Sp ':' Sp b:MetaDataValue
 
 MetaDataKey = < AlphanumericAscii ( Sp ( AlphanumericAscii | '_' | ' ' | '-')+)* >
 
-
 MetaDataValue = a:StartList
                 ((< (!Newline .)* > )
                 ((Newline &(!BlankLine !MetaDataKeyValue Sp RawLine))
                      | Newline)
                 (!BlankLine !MetaDataKeyValue Sp RawLine )* )
-                
+
+## Citations
+
+CitationReference = s:LocMarker
+		( CitationReferenceDouble | CitationReferenceSingle )
+		{ ADD(elem_s(CITATION)); }
+
+CitationReferenceDouble = !"[]" b:Label < Spnl > !"[]" ref:RawCitationReference
+
+CitationReferenceSingle =  (( "[]" Spnl ref:RawCitationReference )
+            | ( ref:RawCitationReference < (Spnl "[]")? > ))
+
+RawCitationReference = "[#" < ( !Newline !']' . )+ > ']'
+
 
 # Not used anywhere in grammar:
 #Notes =         ( Note | SkipBlock )*
