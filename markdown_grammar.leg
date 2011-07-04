@@ -729,7 +729,7 @@ RawCitationReference = "[#" < ( !Newline !']' . )+ > ']'
 ## Math
 
 MathSpan = s:LocMarker
-	'\\' < (
+	< '\\' (
     ('\\[' (!'\\\\]' .)* '\\\\]') |
     ('\\(' (!'\\\\)' .)* '\\\\)') ) >
 	{ ADD(elem_s(MATHSPAN)); }
