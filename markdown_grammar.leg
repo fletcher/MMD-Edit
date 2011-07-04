@@ -738,12 +738,12 @@ MathSpan = s:LocMarker
 ## Tables
 
 Table = s:LocMarker
-	(TableCaption)?
+	< (TableCaption)?
     TableBody
     (SeparatorLine)
     (TableBody)
     (BlankLine !TableCaption TableBody)*
-    ( (TableCaption &BlankLine) | &BlankLine)
+    ( (TableCaption &BlankLine) | &BlankLine) >
     # Requires blank line to end table "block"
 	{ ADD(elem_s(TABLE)); }
 
