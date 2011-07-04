@@ -95,5 +95,44 @@
     [self setString: [textView textStorage]];
 }
 
+- (NSString *)htmlForText
+{
+	NSString *path2MMD = @"/usr/local/bin/multimarkdown";
+
+//	NSLog(@"launching %@", [path2MMD stringByExpandingTildeInPath]);
+	NSTask* task = [[NSTask alloc] init];
+	[task setLaunchPath: [path2MMD stringByExpandingTildeInPath]];
+	[task setArguments: [NSArray arrayWithObjects: nil]];
+	
+	NSPipe *writePipe = [NSPipe pipe];
+	NSFileHandle *writeHandle = [writePipe fileHandleForWriting];
+	[task setStandardInput: writePipe];
+	
+	NSPipe *readPipe = [NSPipe pipe];
+	[task setStandardOutput:readPipe];
+	
+	[task launch];
+	
+	[writeHandle writeData:[[textView string] dataUsingEncoding:NSUTF8StringEncoding]];
+	[writeHandle closeFile];
+	
+	
+	NSData *mdData = [[readPipe fileHandleForReading] readDataToEndOfFile];
+	
+	NSString* aStr;
+	aStr = [[NSString alloc] initWithData:mdData encoding:NSASCIIStringEncoding];
+	
+	[[NSPasteboard generalPasteboard] setString:aStr forType:NSStringPboardType];
+
+	return aStr;
+}
+
+- (IBAction)copyHTMLAction:(id)sender;
+{
+//	NSLog(@"creating preview");
+	
+	[[NSPasteboard generalPasteboard] clearContents];
+	[[NSPasteboard generalPasteboard] setString:[self htmlForText] forType:NSStringPboardType];
+}
 
 @end

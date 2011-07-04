@@ -20,5 +20,6 @@
 
 - (NSAttributedString *) string;
 - (void) setString: (NSAttributedString *) value;
-
+- (NSString *)htmlForText;
+- (IBAction)copyHTMLAction:(id)sender;
 @end
