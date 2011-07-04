@@ -2,6 +2,8 @@
  * Copyright 2011 Ali Rantakari -- http://hasseg.org
  * Licensed under the GPL2+ and MIT licenses (see LICENSE for more info).
  * 
+ * Modifications Copyright 2011 Fletcher T. Penney
+ *
  * HGMarkdownHighlighter.m
  */
 

@@ -97,6 +97,8 @@
 
 - (NSString *)htmlForText
 {
+	// Use an externally installed version of MMD 3 - eventually I would like to build this in
+	
 	NSString *path2MMD = @"/usr/local/bin/multimarkdown";
 
 //	NSLog(@"launching %@", [path2MMD stringByExpandingTildeInPath]);
