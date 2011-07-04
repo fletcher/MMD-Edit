@@ -32,7 +32,7 @@
 			<object class="NSWindowTemplate" id="275939982">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{133, 235}, {507, 413}}</string>
+				<string key="NSWindowRect">{{133, 189}, {726, 459}}</string>
 				<int key="NSWTFlags">1886912512</int>
 				<string key="NSWindowTitle">Window</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -47,7 +47,7 @@
 						<object class="NSTextField" id="433022199">
 							<reference key="NSNextResponder" ref="568628114"/>
 							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{119, 195}, {269, 22}}</string>
+							<string key="NSFrame">{{119, 241}, {269, 22}}</string>
 							<reference key="NSSuperview" ref="568628114"/>
 							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
@@ -117,7 +117,7 @@
 													<string>public.url</string>
 												</object>
 											</object>
-											<string key="NSFrameSize">{450, 14}</string>
+											<string key="NSFrameSize">{669, 14}</string>
 											<reference key="NSSuperview" ref="605090761"/>
 											<reference key="NSWindow"/>
 											<int key="NSViewLayerContentsRedrawPolicy">2</int>
@@ -137,7 +137,7 @@
 													<nil key="NSDelegate"/>
 												</object>
 												<reference key="NSTextView" ref="661041945"/>
-												<double key="NSWidth">450</double>
+												<double key="NSWidth">669</double>
 												<int key="NSTCFlags">1</int>
 											</object>
 											<object class="NSTextViewSharedData" key="NSSharedData">
@@ -196,12 +196,12 @@
 												<nil key="NSDefaultParagraphStyle"/>
 											</object>
 											<int key="NSTVFlags">6</int>
-											<string key="NSMaxSize">{463, 1e+07}</string>
+											<string key="NSMaxSize">{672, 1e+07}</string>
 											<string key="NSMinize">{223, 0}</string>
 											<nil key="NSDelegate"/>
 										</object>
 									</object>
-									<string key="NSFrame">{{1, 1}, {450, 371}}</string>
+									<string key="NSFrame">{{1, 1}, {669, 417}}</string>
 									<reference key="NSSuperview" ref="453368042"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="661041945"/>
@@ -216,7 +216,7 @@
 								<object class="NSScroller" id="267764040">
 									<reference key="NSNextResponder" ref="453368042"/>
 									<int key="NSvFlags">256</int>
-									<string key="NSFrame">{{451, 1}, {15, 371}}</string>
+									<string key="NSFrame">{{670, 1}, {15, 417}}</string>
 									<reference key="NSSuperview" ref="453368042"/>
 									<reference key="NSWindow"/>
 									<reference key="NSTarget" ref="453368042"/>
@@ -237,7 +237,7 @@
 									<double key="NSPercent">0.94565218687057495</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{20, 20}, {467, 373}}</string>
+							<string key="NSFrame">{{20, 20}, {686, 419}}</string>
 							<reference key="NSSuperview" ref="568628114"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="605090761"/>
@@ -247,7 +247,7 @@
 							<reference key="NSContentView" ref="605090761"/>
 						</object>
 					</object>
-					<string key="NSFrameSize">{507, 413}</string>
+					<string key="NSFrameSize">{726, 459}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 				</object>
@@ -428,9 +428,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{359, 100}, {507, 413}}</string>
+					<string>{{114, 340}, {726, 459}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{359, 100}, {507, 413}}</string>
+					<string>{{114, 340}, {726, 459}}</string>
 					<integer value="1"/>
 					<string>{{201, 387}, {507, 413}}</string>
 					<integer value="1"/>

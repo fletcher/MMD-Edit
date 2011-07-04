@@ -48,6 +48,7 @@ Block =     BlankLine*
             | BulletList
             | HtmlBlock
             | StyleBlock
+            | Table
             | Para
             | Plain )
 
@@ -710,6 +711,7 @@ MetaDataValue = a:StartList
                      | Newline)
                 (!BlankLine !MetaDataKeyValue Sp RawLine )* )
 
+
 ## Citations
 
 CitationReference = s:LocMarker
@@ -723,6 +725,7 @@ CitationReferenceSingle =  (( "[]" Spnl ref:RawCitationReference )
 
 RawCitationReference = "[#" < ( !Newline !']' . )+ > ']'
 
+
 ## Math
 
 MathSpan = s:LocMarker
@@ -730,6 +733,65 @@ MathSpan = s:LocMarker
     ('\\[' (!'\\\\]' .)* '\\\\]') |
     ('\\(' (!'\\\\)' .)* '\\\\)') ) >
 	{ ADD(elem_s(MATHSPAN)); }
+
+
+## Tables
+
+Table = s:LocMarker
+	(TableCaption)?
+    TableBody
+    (SeparatorLine)
+    (TableBody)
+    (BlankLine !TableCaption TableBody)*
+    ( (TableCaption &BlankLine) | &BlankLine)
+    # Requires blank line to end table "block"
+	{ ADD(elem_s(TABLE)); }
+
+TableBody = a:StartList (TableRow)+
+
+TableRow = a:StartList
+    (!SeparatorLine &(TableLine)
+    CellDivider?
+    (TableCell)+ ) Sp Newline
+
+TableLine = (!Newline !CellDivider .)* CellDivider
+
+TableCell = ExtendedCell | EmptyCell | FullCell
+
+ExtendedCell = (EmptyCell | FullCell) <CellDivider+>
+
+CellStr = < (!CellDivider NormalChar) (!CellDivider NormalChar | '_'+ &Alphanumeric)* >
+
+FullCell = Sp a:StartList  ((!CellDivider CellStr | !Newline !Endline !CellDivider !Str !(Sp &CellDivider) Inline ))+
+    Sp ( CellDivider )?
+
+EmptyCell = Sp CellDivider
+
+SeparatorLine = a:StartList 
+    &(TableLine)
+    CellDivider?
+    ( AlignmentCell)+ Sp Newline
+
+AlignmentCell = Sp (!CellDivider ( LeftAlignWrap | CenterAlignWrap | RightAlignWrap | LeftAlign | CenterAlign | RightAlign))
+    Sp ( CellDivider )?
+
+LeftAlignWrap = ':'? '-'+ '+' &(!'-' !':')
+
+LeftAlign = ':'? '-'+ &(!'-' !':')
+
+CenterAlignWrap = ':' '-'* '+' ':' &(!'-' !':')
+
+CenterAlign = ':' '-'* ':' &(!'-' !':')
+
+RightAlignWrap = '-'+ ':' '+' &(!'-' !':')
+
+RightAlign = '-'+ ':' &(!'-' !':')
+
+CellDivider = '|'
+
+TableCaption = a:Label
+( c:Label)? Sp Newline
+
 
 # Not used anywhere in grammar:
 #Notes =         ( Note | SkipBlock )*
