@@ -746,7 +746,7 @@ Table = s:LocMarker
     (SeparatorLine)
     (TableBody)
     (BlankLine !TableCaption TableBody)*
-    ( (TableCaption &BlankLine) | &BlankLine) >
+    ( (TableCaption &BlankLine) | &BlankLine | Eof ) >
     # Requires blank line to end table "block"
 	{ ADD(elem_s(TABLE)); }
 
@@ -755,7 +755,7 @@ TableBody = a:StartList (TableRow)+
 TableRow = a:StartList
     (!SeparatorLine &(TableLine)
     CellDivider?
-    (TableCell)+ ) Sp Newline
+    (TableCell)+ ) Sp ( Newline | Eof )
 
 TableLine = (!Newline !CellDivider .)* CellDivider
 
