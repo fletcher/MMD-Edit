@@ -55,7 +55,7 @@
 		hl.makeLinksClickable = YES;
 		
 		self.isMMD = YES;
-		hl.extensions = hl.extensions | EXT_SMART | EXT_NOTES;
+		hl.extensions = hl.extensions | EXT_SMART;
 		
 		[hl activate];
 		
