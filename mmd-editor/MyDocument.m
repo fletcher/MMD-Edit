@@ -37,7 +37,7 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
-    // Add any code here that needs to be executed once the windowController has loaded the document's window.
+    //	Add any code here that needs to be executed once the windowController has loaded the document's window.
 	if ([self string] != nil) {
 	//	[textView setRulerVisible:TRUE];
 		[[textView textStorage] setAttributedString: [self string]];
@@ -49,7 +49,7 @@
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
-		hl.extensions = hl.extensions | EXT_SMART;
+		hl.extensions = hl.extensions | EXT_MMD;
 		hl.makeLinksClickable = YES;
 		[hl activate];
 	}

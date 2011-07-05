@@ -9,8 +9,8 @@
  * peg-markdown compiler.
 
  * It's also modified by Fletcher T. Penney
-	to support the MultiMarkdown grammar
-	http://fletcherpenney.net/mmd/
+ *	to support the MultiMarkdown grammar
+ *	http://fletcherpenney.net/mmd/
  */
 
 /// header_code_here
@@ -30,7 +30,8 @@
 
 %}
 
-Doc =       ( &( MetaDataKey Sp ':' Sp (!Newline)) MetaData )?
+Doc =       ( &{ EXT(EXT_MMD) }
+ 				&( MetaDataKey Sp ':' Sp (!Newline)) MetaData )?
 			( Block )*
 
 # placeholder for marking locations
@@ -48,7 +49,7 @@ Block =     BlankLine*
             | BulletList
             | HtmlBlock
             | StyleBlock
-            | Table
+            | &{ EXT(EXT_MMD) } Table
             | Para
             | Plain )
 
@@ -388,17 +389,17 @@ Inlines  =  ( !Endline Inline
               | Endline &Inline )+ Endline?
 
 Inline  = Str
-		| MathSpan
+		| &{ EXT(EXT_MMD) } MathSpan
         | Endline
         | UlOrStarLine
         | Space
         | Strong
         | Emph
-		| CitationReference
+		| &{ EXT(EXT_MMD) }CitationReference
         | Image
         | Link
         | NoteReference
-#       | InlineNote           # Not used in MultiMarkdown
+        | &{ ! EXT(EXT_MMD) } InlineNote
         | Code
         | RawHtml
         | Entity
@@ -679,7 +680,7 @@ DoubleQuoted =  DoubleQuoteStart
 NoteReference = &{ EXT(EXT_NOTES) }
                 RawNoteReference
 
-RawNoteReference = ( "[^" | "[#" ) ( !Newline !']' . )+ ']'
+RawNoteReference = ( ("[^") |( &{ EXT(EXT_MMD) } "[#" ) ) ( !Newline !']' . )+ ']'
 
 Note =          &{ EXT(EXT_NOTES) }
                 NonindentSpace RawNoteReference ':' Sp
