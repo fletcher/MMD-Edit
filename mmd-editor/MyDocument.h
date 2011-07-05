@@ -19,6 +19,8 @@
 
 	HGMarkdownHighlighter *hl;
 	
+	BOOL isMMD;
+	
 	IBOutlet NSPanel *previewPanel;
 	IBOutlet WebView *previewView;
 }
@@ -27,4 +29,7 @@
 - (void) setString: (NSAttributedString *) value;
 - (NSString *)htmlForText;
 - (IBAction)previewHTMLAction:(id)sender;
+
+@property BOOL isMMD;
+
 @end

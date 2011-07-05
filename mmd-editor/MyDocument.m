@@ -11,6 +11,8 @@
 
 @implementation MyDocument
 
+@synthesize isMMD;
+
 - (id)init
 {
     self = [super init];
@@ -43,15 +45,17 @@
 		[[textView textStorage] setAttributedString: [self string]];
 		
 		[textView setAlignment:NSJustifiedTextAlignment range:NSMakeRange(0, [[self string] length])];
-		[textView setFont:[NSFont fontWithName:@"courier" size:12]];
-		
+		[textView setFont:[NSFont fontWithName:@"courier" size:13]];
+
+
 		hl = [[HGMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
-		hl.extensions = hl.extensions | EXT_MMD;
 		hl.makeLinksClickable = YES;
+		self.isMMD = YES;
 		[hl activate];
+		
 	}
 }
 
@@ -135,6 +139,22 @@
 	
 	[previewPanel makeKeyAndOrderFront:nil];
 	[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
+	
+}
+
+- (void) setIsMMD: (BOOL) newMMD {
+    if (isMMD != newMMD) {
+		isMMD = newMMD;
+		
+		if (isMMD) {
+			hl.extensions = hl.extensions | EXT_MMD;
+		} else {
+			hl.extensions = hl.extensions & ~EXT_MMD;
+		}
+		
+		[hl clearHighlighting];
+		[hl parseAndHighlightNow];
+    }
 	
 }
 
