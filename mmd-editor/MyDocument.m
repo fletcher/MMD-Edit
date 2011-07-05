@@ -146,6 +146,7 @@
 }
 
 - (void) setIsMMD: (BOOL) newMMD {
+	// Toggle between MMD and plain Markdown syntax-highlighting
     if (isMMD != newMMD) {
 		isMMD = newMMD;
 		
@@ -158,7 +159,7 @@
 		[hl clearHighlighting];
 		[hl parseAndHighlightNow];
     }
-	
 }
+
 
 @end
