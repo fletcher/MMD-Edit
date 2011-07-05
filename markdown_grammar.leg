@@ -41,6 +41,7 @@ LocMarker = &. { $$ = elem(NO_TYPE); }
 Block =     BlankLine*
             ( BlockQuote
             | Verbatim
+			| &{ EXT(EXT_MMD) } DefinitionList
             | Note
             | Reference
             | HorizontalRule
@@ -793,6 +794,26 @@ CellDivider = '|'
 
 TableCaption = a:Label
 ( c:Label)? Sp Newline
+
+
+## Definition Lists
+
+DefinitionList =  (
+                    (Term)+
+                    (Definition)+
+                  BlankLine* )+
+
+Term =  !BlankLine !':'
+        < s:LocMarker (!Newline !Endline Inline)+ > { ADD(elem_s(DEFTERM)); }
+		Newline
+        
+		
+
+Definition = 	((BlankLine)?
+                < s:LocMarker ( ':' Sp RawLine) 
+                ( !':' !BlankLine RawLine)*
+                ( BlankLine (IndentedLine)+ )* > )
+		        { ADD(elem_s(DEFINITION)); }
 
 
 # Not used anywhere in grammar:

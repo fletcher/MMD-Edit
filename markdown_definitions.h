@@ -61,6 +61,8 @@ typedef enum
 	FOOTNOTE,
 	MATHSPAN,
 	TABLE,
+	DEFTERM,
+	DEFINITION,
 	
 	/* Utility types used by the parser itself: */
 	RAW_LIST,	/* List of RAW element lists, each to be processed separately from others
@@ -80,7 +82,7 @@ typedef enum
 * \brief Number of types in element_type.
 * \sa element_type
 */
-#define NUM_TYPES 37
+#define NUM_TYPES 39
 
 /**
 * \brief Number of *language element* types in element_type.

@@ -53,7 +53,10 @@
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
 		hl.makeLinksClickable = YES;
+		
 		self.isMMD = YES;
+		hl.extensions = hl.extensions | EXT_SMART | EXT_NOTES;
+		
 		[hl activate];
 		
 	}
