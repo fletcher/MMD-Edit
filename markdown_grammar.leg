@@ -536,7 +536,7 @@ AutoLinkUrl =  < s:LocMarker { $$ = elem(AUTO_LINK_URL); }
                }
 
 AutoLinkEmail = < s:LocMarker { $$ = elem(AUTO_LINK_EMAIL); }
-                '<'
+                '<' ("mailto:")?
                   < [-A-Za-z0-9+_.]+ '@' ( !Newline !'>' . )+ >
                   { $$->address = strdup(yytext); }
                 '>' >
