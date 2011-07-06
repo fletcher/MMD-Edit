@@ -31,6 +31,7 @@
 - (IBAction)previewHTMLAction:(id)sender;
 
 - (IBAction)formatMetaData:(id)sender;
+- (IBAction)formatTables:(id)sender;
 
 @property BOOL isMMD;
 

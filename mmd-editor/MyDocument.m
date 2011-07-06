@@ -46,7 +46,7 @@
 		[[textView textStorage] setAttributedString: [self string]];
 		
 		[textView setAlignment:NSJustifiedTextAlignment range:NSMakeRange(0, [[self string] length])];
-		[textView setFont:[NSFont fontWithName:@"courier" size:13]];
+		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];
 
 
 		hl = [[HGMarkdownHighlighter alloc] init];
@@ -56,10 +56,8 @@
 		hl.makeLinksClickable = YES;
 		
 		self.isMMD = YES;
-		hl.extensions = hl.extensions | EXT_SMART;
 		
 		[hl activate];
-		
 	}
 }
 
@@ -167,7 +165,12 @@
 	// find range for MetaData and do something
 	int maxWidth = 0;
 	
-	NSString *metaDataRangeString = [[hl rangesForElementType:METADATA] objectAtIndex:0];
+	NSArray *metaDataRanges = [hl rangesForElementType:METADATA];
+	
+	if ([metaDataRanges count] == 0)
+		return;
+	
+	NSString *metaDataRangeString = [metaDataRanges objectAtIndex:0];
 	NSRange metaDataRange = NSRangeFromString(metaDataRangeString);
 	
 	//	NSLog(@"Found range %@",metaDataRangeString);
@@ -189,16 +192,16 @@
 	}
 
 	
-	NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
+	NSMutableParagraphStyle *paraStyle; // = [[textView defaultParagraphStyle] mutableCopy];
 	
 		
-	if (paraStyle == nil) {
+//	if (paraStyle == nil) {
 		paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-	}
+//	}
 	
 	NSFont *myFont = [[textView textStorage] font];
 	
-	float charWidth = [[myFont screenFontWithRenderingMode:NSFontDefaultRenderingMode] advancementForGlyph:(NSGlyph) ' '].width;
+	float charWidth = [[myFont screenFontWithRenderingMode:NSFontDefaultRenderingMode] advancementForGlyph:(NSGlyph) 'T'].width;
 	[paraStyle setDefaultTabInterval:(charWidth * (maxWidth +4))];
 	[paraStyle setTabStops:[NSArray array]];
 	
@@ -206,7 +209,7 @@
 	
 	NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
 	[typingAttributes setObject:paraStyle forKey:NSParagraphStyleAttributeName];
-//	[typingAttributes setObject:scriptFont forKey:NSFontAttributeName];
+	[typingAttributes setObject:myFont forKey:NSFontAttributeName];
 //	[textView setTypingAttributes:typingAttributes];
 	
 	/** ADDED CODE BELOW **/
@@ -216,8 +219,36 @@
 	
 	[paraStyle release];
 	[typingAttributes release];
+	
+	[self formatTables:nil];
 }
 
+- (IBAction)formatTables:(id)sender
+{
+	// find range for Tables and do something
+	NSArray *tableRanges = [hl rangesForElementType:TABLE];
+	
+	if ([tableRanges count] == 0)
+		return;
+	
+	NSEnumerator *enumerator = [tableRanges objectEnumerator];
+	id aTableRangeString;
+	
+	//NSFont *myFont = [[textView textStorage] font];
+	
+	NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
+	[typingAttributes setObject:[NSFont fontWithName:@"courier" size:13] forKey:NSFontAttributeName];
+
+	while (aTableRangeString = [enumerator nextObject]) {
+		NSRange theRange = NSRangeFromString(aTableRangeString);
+		
+
+		[[textView textStorage] setAttributes:typingAttributes range:theRange];
+	}
+	
+	//[textView setFont:myFont];
+	[textView didChangeText];
+}
 
 
 @end

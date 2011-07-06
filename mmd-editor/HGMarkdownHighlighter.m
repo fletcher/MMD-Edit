@@ -544,6 +544,9 @@
 	NSMutableAttributedString *attrStr = [self.targetTextView textStorage];
 	unsigned long sourceLength = [attrStr length];
 	
+	if (cachedElements == NULL)
+		return targetRanges;
+
 	element *cursor = cachedElements[targetElementType];
 	
 	while (cursor != NULL)
@@ -568,7 +571,7 @@
 		
 		NSString  *rangeString = [[NSString alloc] initWithString:NSStringFromRange(aRange)];
 		
-		NSLog(@"Ranging %@",rangeString);
+//		NSLog(@"Ranging %@",rangeString);
 		
 		[targetRanges addObject:rangeString];
 		
