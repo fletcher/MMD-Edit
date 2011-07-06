@@ -147,4 +147,6 @@
 - (void) deactivate;
 
 - (NSArray *)rangesForElementType:(int)targetElementType;
+- (NSArray *)rangesForElementType:(int)targetElementType inRange:(NSRange)range;
+
 @end

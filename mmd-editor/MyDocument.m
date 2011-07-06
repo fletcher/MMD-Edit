@@ -8,6 +8,7 @@
 
 #import "MyDocument.h"
 #import "HGMarkdownHighlightingStyle.h"
+#import "HGMarkdownHighlighter.h"
 
 @implementation MyDocument
 
@@ -164,20 +165,59 @@
 - (IBAction)formatMetaData:(id)sender
 {
 	// find range for MetaData and do something
+	int maxWidth = 0;
 	
-	NSArray *rangeArray = [hl rangesForElementType:METADATA];
-
-	NSEnumerator *enumerator = [rangeArray objectEnumerator];
-	id aRangeString;
+	NSString *metaDataRangeString = [[hl rangesForElementType:METADATA] objectAtIndex:0];
+	NSRange metaDataRange = NSRangeFromString(metaDataRangeString);
 	
-	while (aRangeString = [enumerator nextObject]) {
-		NSRange theRange = NSRangeFromString(aRangeString);
-//		NSLog(@"Found range %@",aRangeString);
+	//	NSLog(@"Found range %@",metaDataRangeString);
+	//	[hl clearHighlightingForRange:metaDataRange];
+	
+	NSArray *metaKeyArray = [hl rangesForElementType:METAKEY inRange:metaDataRange];
+	
+	NSEnumerator *enumerator = [metaKeyArray objectEnumerator];
+	id aMetaKeyString;
+	
+	while (aMetaKeyString = [enumerator nextObject]) {
+		NSRange theRange = NSRangeFromString(aMetaKeyString);
+//		NSLog(@"Metakey range %@",aMetaKeyString);
 		
-//		[hl clearHighlightingForRange:theRange];
-		
-		
+		if (theRange.length > maxWidth)
+		{
+			maxWidth = theRange.length;
+		}
 	}
+
+	
+	NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
+	
+		
+	if (paraStyle == nil) {
+		paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+	}
+	
+	NSFont *myFont = [[textView textStorage] font];
+	
+	float charWidth = [[myFont screenFontWithRenderingMode:NSFontDefaultRenderingMode] advancementForGlyph:(NSGlyph) ' '].width;
+	[paraStyle setDefaultTabInterval:(charWidth * (maxWidth +4))];
+	[paraStyle setTabStops:[NSArray array]];
+	
+//	[textView setDefaultParagraphStyle:paragraphStyle];
+	
+	NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
+	[typingAttributes setObject:paraStyle forKey:NSParagraphStyleAttributeName];
+//	[typingAttributes setObject:scriptFont forKey:NSFontAttributeName];
+//	[textView setTypingAttributes:typingAttributes];
+	
+	/** ADDED CODE BELOW **/
+	[textView shouldChangeTextInRange:metaDataRange replacementString:nil];
+	[[textView textStorage] setAttributes:typingAttributes range:metaDataRange];
+	[textView didChangeText];
+	
+	[paraStyle release];
+	[typingAttributes release];
 }
+
+
 
 @end

@@ -531,23 +531,44 @@
 
 - (NSArray *)rangesForElementType:(int)targetElementType
 {
-	NSMutableArray *targetRanges = [[NSMutableArray alloc] initWithCapacity:10];
+	return [self rangesForElementType:targetElementType inRange:NSMakeRange(0, [[self.targetTextView textStorage] length])];
+}
+
+
+- (NSArray *)rangesForElementType:(int)targetElementType inRange:(NSRange)range;
+{
+	NSMutableArray *targetRanges = [NSMutableArray array];
+	
+	NSUInteger rangeEnd = NSMaxRange(range);
+	
+	NSMutableAttributedString *attrStr = [self.targetTextView textStorage];
+	unsigned long sourceLength = [attrStr length];
 	
 	element *cursor = cachedElements[targetElementType];
 	
 	while (cursor != NULL)
 	{
-		if (cursor->end <= cursor->pos)
+		if (cursor->end <= cursor->pos
+			|| cursor->end <= range.location)
 		{
 			cursor = cursor->next;
 			continue;
 		}
 		
-		NSRange aRange = NSMakeRange(cursor->pos, cursor->end - cursor->pos);
+		if (cursor->pos >= rangeEnd)
+			break;
+		
+		unsigned long rangePosLowLimited = MAX(cursor->pos, (unsigned long)0);
+		unsigned long rangePos = MIN(rangePosLowLimited, sourceLength);
+		unsigned long len = cursor->end - cursor->pos;
+		if (rangePos+len > sourceLength)
+			len = sourceLength-rangePos;
+		NSRange aRange = NSMakeRange(rangePos, len);
+		
 		
 		NSString  *rangeString = [[NSString alloc] initWithString:NSStringFromRange(aRange)];
 		
-		//NSLog(@"Ranging %@",rangeString);
+		NSLog(@"Ranging %@",rangeString);
 		
 		[targetRanges addObject:rangeString];
 		
@@ -556,5 +577,6 @@
 	
 	return targetRanges;
 }
+
 
 @end
