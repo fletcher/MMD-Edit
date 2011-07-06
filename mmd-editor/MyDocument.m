@@ -161,5 +161,23 @@
     }
 }
 
+- (IBAction)formatMetaData:(id)sender
+{
+	// find range for MetaData and do something
+	
+	NSArray *rangeArray = [hl rangesForElementType:METADATA];
+
+	NSEnumerator *enumerator = [rangeArray objectEnumerator];
+	id aRangeString;
+	
+	while (aRangeString = [enumerator nextObject]) {
+		NSRange theRange = NSRangeFromString(aRangeString);
+//		NSLog(@"Found range %@",aRangeString);
+		
+//		[hl clearHighlightingForRange:theRange];
+		
+		
+	}
+}
 
 @end

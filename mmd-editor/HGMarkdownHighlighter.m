@@ -529,6 +529,32 @@
 	self.isActive = NO;
 }
 
-
+- (NSArray *)rangesForElementType:(int)targetElementType
+{
+	NSMutableArray *targetRanges = [[NSMutableArray alloc] initWithCapacity:10];
+	
+	element *cursor = cachedElements[targetElementType];
+	
+	while (cursor != NULL)
+	{
+		if (cursor->end <= cursor->pos)
+		{
+			cursor = cursor->next;
+			continue;
+		}
+		
+		NSRange aRange = NSMakeRange(cursor->pos, cursor->end - cursor->pos);
+		
+		NSString  *rangeString = [[NSString alloc] initWithString:NSStringFromRange(aRange)];
+		
+		//NSLog(@"Ranging %@",rangeString);
+		
+		[targetRanges addObject:rangeString];
+		
+		cursor = cursor->next;
+	}
+	
+	return targetRanges;
+}
 
 @end

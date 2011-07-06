@@ -30,6 +30,8 @@
 - (NSString *)htmlForText;
 - (IBAction)previewHTMLAction:(id)sender;
 
+- (IBAction)formatMetaData:(id)sender;
+
 @property BOOL isMMD;
 
 @end
