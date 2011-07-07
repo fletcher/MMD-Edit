@@ -61,6 +61,10 @@ typedef enum
 	FOOTNOTE,
 	MATHSPAN,
 	TABLE,
+	TABLEROW,
+	TABLESEPARATOR,
+	SEPARATORCELL,
+	CELLCONTENTS,
 	DEFTERM,
 	DEFINITION,
 	
@@ -82,7 +86,7 @@ typedef enum
 * \brief Number of types in element_type.
 * \sa element_type
 */
-#define NUM_TYPES 39
+#define NUM_TYPES 43
 
 /**
 * \brief Number of *language element* types in element_type.

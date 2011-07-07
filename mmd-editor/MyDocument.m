@@ -168,7 +168,10 @@
 	NSArray *metaDataRanges = [hl rangesForElementType:METADATA];
 	
 	if ([metaDataRanges count] == 0)
+	{
+		[self formatTables:nil];
 		return;
+	}
 	
 	NSString *metaDataRangeString = [metaDataRanges objectAtIndex:0];
 	NSRange metaDataRange = NSRangeFromString(metaDataRangeString);
@@ -202,8 +205,11 @@
 	NSFont *myFont = [[textView textStorage] font];
 	
 	float charWidth = [[myFont screenFontWithRenderingMode:NSFontDefaultRenderingMode] advancementForGlyph:(NSGlyph) 'T'].width;
-	[paraStyle setDefaultTabInterval:(charWidth * (maxWidth +4))];
+//	[paraStyle setDefaultTabInterval:(charWidth * (maxWidth +4))];
 	[paraStyle setTabStops:[NSArray array]];
+
+	[paraStyle addTabStop:[[[NSTextTab alloc] initWithType:NSLeftTabStopType location:(charWidth * (maxWidth +3))] autorelease]];
+
 	
 //	[textView setDefaultParagraphStyle:paragraphStyle];
 	
@@ -236,19 +242,90 @@
 	
 	//NSFont *myFont = [[textView textStorage] font];
 	
-	NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
-	[typingAttributes setObject:[NSFont fontWithName:@"courier" size:13] forKey:NSFontAttributeName];
+//	NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
+//	[typingAttributes setObject:[NSFont fontWithName:@"courier" size:13] forKey:NSFontAttributeName];
 
 	while (aTableRangeString = [enumerator nextObject]) {
-		NSRange theRange = NSRangeFromString(aTableRangeString);
+		// Iterate through each table
+		NSRange tableRange = NSRangeFromString(aTableRangeString);
+		int cols;
+		
+		
+		// Find and count separator cells to determine # columns
+		NSArray *separatorCells = [hl rangesForElementType:SEPARATORCELL inRange:tableRange];
+		cols = [separatorCells count];
+		
+		// Create array to store max width for each column
+		int colWidth[cols];
+		memset(colWidth, 0, sizeof colWidth);
+		
+		
+		// Find and count table rows to determine # rows
+		NSArray *tableRows = [hl rangesForElementType:TABLEROW inRange:tableRange];
+		
+		
+		// Iterate through rows, and check cells for max width
+		// TODO: Need to fix this to account for cells that span more than one column
+		NSEnumerator *rowEnumerator = [tableRows objectEnumerator];
+		id aTableRowRangeString;
+		int counter;
+		
+		while (aTableRowRangeString = [rowEnumerator nextObject])
+		{
+			NSRange rowRange = NSRangeFromString(aTableRowRangeString);
+			
+			// iterate through cells in this row
+			NSArray *rowCells = [hl rangesForElementType:CELLCONTENTS inRange:rowRange];
+			NSEnumerator *cellEnumerator = [rowCells objectEnumerator];
+			id aTableCell;
+			counter = 0;
+			
+			while (aTableCell = [cellEnumerator nextObject]) {
+				// Compare width of contents to the previous maximum
+	
+				NSRange cellRange = NSRangeFromString(aTableCell);
+				
+				if (cellRange.length > colWidth[counter]) {
+					colWidth[counter] = cellRange.length;
+				}
+				
+				counter++;
+			}
+		}
 		
 
-		[[textView textStorage] setAttributes:typingAttributes range:theRange];
+		// Get avg character width
+		NSFont *myFont = [[textView textStorage] font];
+		float charWidth = [[myFont screenFontWithRenderingMode:NSFontDefaultRenderingMode] advancementForGlyph:(NSGlyph) 'T'].width;
+		
+		float tabTotal = 0;
+		NSMutableParagraphStyle *paraStyle;
+		paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+
+		[paraStyle setTabStops:[NSArray array]]; // delete default tabs
+		
+		for (int i=0; i<cols; i++)
+		{
+			tabTotal += (charWidth * (colWidth[i] + 3));
+
+			[paraStyle addTabStop:[[[NSTextTab alloc] initWithType:NSLeftTabStopType location:tabTotal] autorelease]];
+			
+			NSLog(@"Max width for column %d is %d",i,colWidth[i]);
+		}
+
+
+		NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
+		[typingAttributes setObject:paraStyle forKey:NSParagraphStyleAttributeName];
+
+		[[textView textStorage] setAttributes:typingAttributes range:tableRange];
+		[paraStyle release];
+		[typingAttributes release];
 	}
 	
 	//[textView setFont:myFont];
 	[textView didChangeText];
 }
+
 
 
 @end

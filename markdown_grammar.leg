@@ -752,10 +752,11 @@ Table = s:LocMarker
 
 TableBody = a:StartList (TableRow)+
 
-TableRow = a:StartList
-    (!SeparatorLine &(TableLine)
+TableRow = s:LocMarker
+    < (!SeparatorLine &(TableLine)
     CellDivider?
-    (TableCell)+ ) Sp ( Newline | Eof )
+    (TableCell)+ ) Sp > ( Newline | Eof )
+	{ADD(elem_s(TABLEROW));}
 
 TableLine = (!Newline !CellDivider .)* CellDivider
 
@@ -765,18 +766,20 @@ ExtendedCell = (EmptyCell | FullCell) <CellDivider+>
 
 CellStr = < (!CellDivider NormalChar) (!CellDivider NormalChar | '_'+ &Alphanumeric)* >
 
-FullCell = Sp a:StartList  ((!CellDivider CellStr | !Newline !Endline !CellDivider !Str !(Sp &CellDivider) Inline ))+
+FullCell = Sp a:StartList  < s:LocMarker ((!CellDivider CellStr | !Newline !Endline !CellDivider !Str !(Sp &CellDivider) Inline ))+ >
     Sp ( CellDivider )?
+	{ ADD(elem_s(CELLCONTENTS)); }
 
 EmptyCell = Sp CellDivider
 
-SeparatorLine = a:StartList 
-    &(TableLine)
-    CellDivider?
-    ( AlignmentCell)+ Sp Newline
+SeparatorLine = &(TableLine)
+				CellDivider?
+				< ( AlignmentCell)+ > Sp Newline
+				{ADD(elem(TABLESEPARATOR));}
 
-AlignmentCell = Sp (!CellDivider ( LeftAlignWrap | CenterAlignWrap | RightAlignWrap | LeftAlign | CenterAlign | RightAlign))
+AlignmentCell = Sp < s:LocMarker (!CellDivider ( LeftAlignWrap | CenterAlignWrap | RightAlignWrap | LeftAlign | CenterAlign | RightAlign)) >
     Sp ( CellDivider )?
+	{ADD(elem_s(SEPARATORCELL));}
 
 LeftAlignWrap = ':'? '-'+ '+' &(!'-' !':')
 
