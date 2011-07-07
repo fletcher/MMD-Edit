@@ -47,7 +47,6 @@
 		
 		// TODO: Need to set default alignment for empty and non-empty textView's....
 		
-		[textView setAlignment:NSJustifiedTextAlignment range:NSMakeRange(0, [[self string] length])];
 		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];
 
 		NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
@@ -56,6 +55,10 @@
 		}
 
 		[paraStyle setAlignment:NSJustifiedTextAlignment];
+		
+		// Try to make it stick...
+		
+		[textView setAlignment:NSJustifiedTextAlignment range:NSMakeRange(0, [[self string] length])];
 		[[textView textStorage] addAttribute:NSParagraphStyleAttributeName
 									   value:paraStyle
 									   range:NSMakeRange(0, [[self string] length])];
@@ -327,16 +330,13 @@
 			NSLog(@"Max width for column %d is %d",i,colWidth[i]);
 		}
 
-
-		NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
-		[typingAttributes setObject:paraStyle forKey:NSParagraphStyleAttributeName];
-
-		[[textView textStorage] setAttributes:typingAttributes range:tableRange];
+		[[textView textStorage] addAttribute:NSParagraphStyleAttributeName
+									   value:paraStyle
+									   range:tableRange];
+		
 		[paraStyle release];
-		[typingAttributes release];
 	}
 	
-	//[textView setFont:myFont];
 	[textView didChangeText];
 }
 
