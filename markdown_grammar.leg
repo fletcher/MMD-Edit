@@ -63,14 +63,14 @@ AtxInline = !Newline !(Sp? '#'* Sp Newline) Inline
 AtxStart =  < ( "######" | "#####" | "####" | "###" | "##" | "#" ) >
             { $$ = elem((element_type)(H1 + (strlen(yytext) - 1))); }
 
-AtxHeading = < s:AtxStart Sp? ( AtxInline )+ (Sp? '#'* Sp)? Newline >
+AtxHeading = < s:AtxStart Sp? ( AtxInline )+ (Sp? '#'* Sp)? (Newline | Eof) >
             { ADD(elem_s(s->type)); }
 
 SetextHeading = SetextHeading1 | SetextHeading2
 
-SetextBottom1 = "===" '='* Newline
+SetextBottom1 = "===" '='* (Newline | Eof)
 
-SetextBottom2 = "---" '-'* Newline
+SetextBottom2 = "---" '-'* (Newline | Eof)
 
 SetextHeading1 =  &(RawLine SetextBottom1)
                   s:LocMarker
@@ -549,7 +549,7 @@ AutoLinkEmail = < s:LocMarker { $$ = elem(AUTO_LINK_EMAIL); }
                }
 
 Reference = < s:LocMarker
-              NonindentSpace !"[]" l:Label ':' Spnl r:RefSrc RefTitle > BlankLine+
+              NonindentSpace !"[]" l:Label ':' Spnl r:RefSrc RefTitle > (BlankLine+ | Eof)
               {
                 element *el = elem_s(REFERENCE);
                 el->label = strdup(l->label);
@@ -711,7 +711,7 @@ MetaDataKey = < s:LocMarker AlphanumericAscii ( Sp ( AlphanumericAscii | '_' | '
 MetaDataValue = 
                 ((< s:LocMarker (!Newline .)* > )
                 ((Newline &(!BlankLine !MetaDataKeyValue Sp RawLine))
-                     | Newline)
+                     | Newline | Eof)
                 (!BlankLine !MetaDataKeyValue Sp RawLine )* )
 
 
