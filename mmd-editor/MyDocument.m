@@ -42,13 +42,26 @@
     [super windowControllerDidLoadNib:aController];
     //	Add any code here that needs to be executed once the windowController has loaded the document's window.
 	if ([self string] != nil) {
-	//	[textView setRulerVisible:TRUE];
+		[textView setRulerVisible:TRUE];
 		[[textView textStorage] setAttributedString: [self string]];
+		
+		// TODO: Need to set default alignment for empty and non-empty textView's....
 		
 		[textView setAlignment:NSJustifiedTextAlignment range:NSMakeRange(0, [[self string] length])];
 		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];
 
+		NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
+		if (paraStyle == nil) {
+			paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+		}
 
+		[paraStyle setAlignment:NSJustifiedTextAlignment];
+		[[textView textStorage] addAttribute:NSParagraphStyleAttributeName
+									   value:paraStyle
+									   range:NSMakeRange(0, [[self string] length])];
+		[textView setDefaultParagraphStyle:paraStyle];
+
+		
 		hl = [[HGMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
@@ -195,12 +208,10 @@
 	}
 
 	
-	NSMutableParagraphStyle *paraStyle; // = [[textView defaultParagraphStyle] mutableCopy];
-	
-		
-//	if (paraStyle == nil) {
+	NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
+	if (paraStyle == nil) {
 		paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-//	}
+	}
 	
 	NSFont *myFont = [[textView textStorage] font];
 	
@@ -299,9 +310,12 @@
 		float charWidth = [[myFont screenFontWithRenderingMode:NSFontDefaultRenderingMode] advancementForGlyph:(NSGlyph) 'T'].width;
 		
 		float tabTotal = 0;
-		NSMutableParagraphStyle *paraStyle;
-		paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 
+		NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
+		if (paraStyle == nil) {
+			paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+		}
+		
 		[paraStyle setTabStops:[NSArray array]]; // delete default tabs
 		
 		for (int i=0; i<cols; i++)
