@@ -374,7 +374,7 @@
 {
 	if (cachedElements == NULL)
 		return;
-	[self applyVisibleRangeHighlighting];
+	//[self applyVisibleRangeHighlighting];
 }
 
 
@@ -588,6 +588,17 @@
 	
 	return targetRanges;
 }
+
+- (void)highlightEverything
+{	
+	if (cachedElements == NULL)
+		return;
+	NSLog(@"Do it");
+	[self applyHighlighting:cachedElements withRange:NSMakeRange(0, [[self.targetTextView textStorage] length])];
+	if (self.resetTypingAttributes)
+		[self.targetTextView setTypingAttributes:self.defaultTypingAttributes];
+}
+	
 
 
 @end
