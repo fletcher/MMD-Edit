@@ -44,15 +44,17 @@
 	if ([self string] != nil) {
 		[textView setRulerVisible:TRUE];
 		
+		// TODO: For some reason, Justified text causes "stuttering" when scrolling the document
+		// Haven't been able to track the cause down...
 		NSMutableParagraphStyle *paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 		[paraStyle setAlignment:NSJustifiedTextAlignment];
-
 		[textView setDefaultParagraphStyle:paraStyle];
-		[[textView textStorage] setAttributedString: [self string]];
-		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];
-
 		[paraStyle release];
 
+
+		[[textView textStorage] setAttributedString: [self string]];
+		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];		
+		
 		hl = [[HGMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
@@ -160,7 +162,9 @@
 		}
 		
 		[hl clearHighlighting];
+		[hl readClearTextStylesFromTextView];
 		[hl parseAndHighlightNow];
+
     }
 }
 
@@ -316,7 +320,7 @@
 
 			[paraStyle addTabStop:[[[NSTextTab alloc] initWithType:NSLeftTabStopType location:tabTotal] autorelease]];
 			
-			NSLog(@"Max width for column %d is %d",i,colWidth[i]);
+//			NSLog(@"Max width for column %d is %d",i,colWidth[i]);
 		}
 
 		[[textView textStorage] addAttribute:NSParagraphStyleAttributeName

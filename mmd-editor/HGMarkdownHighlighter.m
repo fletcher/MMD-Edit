@@ -235,7 +235,9 @@
 						forKey:NSFontAttributeName];
 	
 	// Updated by Fletcher T. Penney - otherwise it erases paragraph styling
-	[typingAttrs setObject:[self.targetTextView defaultParagraphStyle] forKey:NSParagraphStyleAttributeName];
+	if ([self.targetTextView defaultParagraphStyle] != nil)
+		[typingAttrs setObject:[self.targetTextView defaultParagraphStyle]
+						forKey:NSParagraphStyleAttributeName];
 	
 	self.defaultTypingAttributes = typingAttrs;
 }
