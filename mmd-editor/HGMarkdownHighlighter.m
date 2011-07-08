@@ -374,7 +374,7 @@
 {
 	if (cachedElements == NULL)
 		return;
-	//[self applyVisibleRangeHighlighting];
+	[self applyVisibleRangeHighlighting];
 }
 
 
