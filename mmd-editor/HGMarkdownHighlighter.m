@@ -48,6 +48,7 @@
 	cachedElements = NULL;
 	currentHighlightText = NULL;
 	styleDependenciesPending = NO;
+	highlightingIsDirty = YES;
 	
 	self.defaultTypingAttributes = nil;
 	self.workerThread = nil;
@@ -368,13 +369,18 @@
 				   userInfo:nil
 				   repeats:NO
 				   ];
+	highlightingIsDirty = YES;
 }
 
 - (void) textViewDidScroll:(NSNotification *)notification
 {
 	if (cachedElements == NULL)
 		return;
-	[self applyVisibleRangeHighlighting];
+	if (highlightingIsDirty)
+	{
+		[self applyVisibleRangeHighlighting];
+		[self highlightEverything];
+	}
 }
 
 
@@ -593,10 +599,10 @@
 {	
 	if (cachedElements == NULL)
 		return;
-	NSLog(@"Do it");
 	[self applyHighlighting:cachedElements withRange:NSMakeRange(0, [[self.targetTextView textStorage] length])];
 	if (self.resetTypingAttributes)
 		[self.targetTextView setTypingAttributes:self.defaultTypingAttributes];
+	highlightingIsDirty = NO;
 }
 	
 

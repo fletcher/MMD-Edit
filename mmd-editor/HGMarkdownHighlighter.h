@@ -35,6 +35,7 @@
 	char *currentHighlightText;
 	BOOL workerThreadResultsInvalid;
 	BOOL styleDependenciesPending;
+	BOOL highlightingIsDirty;
 }
 
 /** \brief The order and styles for higlighting different elements.
