@@ -13,6 +13,30 @@
 #include <ctype.h>
 
 
+// vasprintf is not in the C standard nor in POSIX so we provide our own
+int our_vasprintf(char **strptr, const char *fmt, va_list argptr)
+{
+    int ret;
+    va_list argptr2;
+    *strptr = NULL;
+    
+    va_copy(argptr2, argptr);
+    ret = vsnprintf(NULL, 0, fmt, argptr2);
+    if (ret <= 0)
+        return ret;
+    
+    *strptr = (char *)malloc(ret+1);
+    if (*strptr == NULL)
+        return -1;
+    
+    va_copy(argptr2, argptr);
+    ret = vsnprintf(*strptr, ret+1, fmt, argptr2);
+    
+    return ret;
+}
+
+
+
 // Set custom symbol name prefix to avoid name collisions with the main
 // PEG Markdown Highlight parser:
 #define YY_NAME(N) style_yy##N
@@ -78,6 +102,19 @@ sem_value *new_sem_value(char *name, char *value)
     v->value = value;
     v->next = NULL;
     return v;
+}
+
+void free_sem_values(sem_value *list)
+{
+    sem_value *cur = list;
+    while (cur != NULL)
+    {
+        if (cur->name != NULL) free(cur->name);
+        if (cur->value != NULL) free(cur->value);
+        sem_value *this = cur;
+        cur = cur->next;
+        free(this);
+    }
 }
 
 static sem_value *cons(sem_value *elem, sem_value *list)
@@ -186,7 +223,7 @@ void report_error(style_parser_data *p_data, char *str, ...)
     va_list argptr;
     va_start(argptr, str);
     char *errmsg;
-    vasprintf(&errmsg, str, argptr);
+    our_vasprintf(&errmsg, str, argptr);
     va_end(argptr);
     p_data->error_callback(errmsg);
     free(errmsg);
@@ -331,6 +368,8 @@ StyleDef =      x:StartList
                 ( a:StyleAttrLine { x = cons(a, x); } )+
                 { interpret_and_add_style((style_parser_data *)G->data,
                                           l->name, x);
+                  free_sem_values(x);
+                  free_sem_values(l);
                 }
 
 StyleLabel =    < ("editor"|StyleLabelChar+) >
@@ -406,9 +445,46 @@ style_collection *parse_styles(char *input, void(*error_callback)(char*))
 {
     style_parser_data *p_data = new_style_parser_data(input);
     p_data->error_callback = error_callback;
+    
     _sty_parse(p_data);
-    return p_data->styles;
+    
+    style_collection *ret = p_data->styles;
+    free(p_data);
+    return ret;
 }
 
+void free_style_attributes(style_attribute *list)
+{
+    style_attribute *cur = list;
+    while (cur != NULL)
+    {
+        if (cur->name != NULL)
+            free(cur->name);
+        if (cur->value != NULL)
+        {
+            if (cur->type == attr_type_foreground_color
+                || cur->type == attr_type_background_color)
+                free(cur->value->argb_color);
+            if (cur->type == attr_type_font_family)
+                free(cur->value->font_family);
+            if (cur->type == attr_type_other)
+                free(cur->value->string);
+            free(cur->value);
+        }
+        style_attribute *this = cur;
+        cur = cur->next;
+        free(this);
+    }
+}
+
+void free_style_collection(style_collection *coll)
+{
+    free_style_attributes(coll->editor_styles);
+    int i;
+    for (i = 0; i < NUM_LANG_TYPES; i++)
+        free_style_attributes(coll->element_styles[i]);
+    free(coll->element_styles);
+    free(coll);
+}
 
 

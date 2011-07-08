@@ -26,7 +26,10 @@ void print_styles(style_attribute *list)
 {
     while (list != NULL)
     {
-        printf("  %s = ", attr_name_from_type(list->type));
+        char *attr_name = (list->type == attr_type_other)
+                          ? list->name
+                          : attr_name_from_type(list->type);
+        printf("  %s = ", attr_name);
         if (list->type == attr_type_background_color
             || list->type == attr_type_foreground_color
             )
@@ -80,6 +83,9 @@ int main(int argc, char *argv[])
         printf("%s:\n", element_name_from_type(cur->lang_element_type));
         print_styles(cur);
     }
+    
+    free_style_collection(styles);
+    free(input);
     
     return 0;
 }
