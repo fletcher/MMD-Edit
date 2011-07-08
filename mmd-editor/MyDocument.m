@@ -43,34 +43,22 @@
     //	Add any code here that needs to be executed once the windowController has loaded the document's window.
 	if ([self string] != nil) {
 		[textView setRulerVisible:TRUE];
+		
+		NSMutableParagraphStyle *paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+		[paraStyle setAlignment:NSJustifiedTextAlignment];
+
+		[textView setDefaultParagraphStyle:paraStyle];
 		[[textView textStorage] setAttributedString: [self string]];
-		
-		// TODO: Need to set default alignment for empty and non-empty textView's....
-		
 		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];
 
-		NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
-		if (paraStyle == nil) {
-			paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-		}
+		[paraStyle release];
 
-		[paraStyle setAlignment:NSJustifiedTextAlignment];
-		
-		// Try to make it stick...
-		
-		[textView setAlignment:NSJustifiedTextAlignment range:NSMakeRange(0, [[self string] length])];
-		[[textView textStorage] addAttribute:NSParagraphStyleAttributeName
-									   value:paraStyle
-									   range:NSMakeRange(0, [[self string] length])];
-		[textView setDefaultParagraphStyle:paraStyle];
-
-		
 		hl = [[HGMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
 		hl.makeLinksClickable = YES;
-		
+				
 		self.isMMD = YES;
 		
 		[hl activate];
@@ -176,6 +164,15 @@
     }
 }
 
+- (IBAction)tidyRulers:(id)sender
+{
+	[self formatMetaData:nil];
+	[self formatTables:nil];
+	
+	//[self formatBlockQuotes:nil]
+	
+}
+
 - (IBAction)formatMetaData:(id)sender
 {
 	// find range for MetaData and do something
@@ -185,7 +182,6 @@
 	
 	if ([metaDataRanges count] == 0)
 	{
-		[self formatTables:nil];
 		return;
 	}
 	
@@ -239,8 +235,6 @@
 	
 	[paraStyle release];
 	[typingAttributes release];
-	
-	[self formatTables:nil];
 }
 
 - (IBAction)formatTables:(id)sender
@@ -254,11 +248,6 @@
 	NSEnumerator *enumerator = [tableRanges objectEnumerator];
 	id aTableRangeString;
 	
-	//NSFont *myFont = [[textView textStorage] font];
-	
-//	NSMutableDictionary* typingAttributes = [[textView typingAttributes] mutableCopy];
-//	[typingAttributes setObject:[NSFont fontWithName:@"courier" size:13] forKey:NSFontAttributeName];
-
 	while (aTableRangeString = [enumerator nextObject]) {
 		// Iterate through each table
 		NSRange tableRange = NSRangeFromString(aTableRangeString);

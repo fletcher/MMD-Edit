@@ -30,6 +30,7 @@
 - (NSString *)htmlForText;
 - (IBAction)previewHTMLAction:(id)sender;
 
+- (IBAction)tidyRulers:(id)sender;
 - (IBAction)formatMetaData:(id)sender;
 - (IBAction)formatTables:(id)sender;
 
