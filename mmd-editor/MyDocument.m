@@ -160,8 +160,6 @@
 		
 		[hl clearHighlighting];
 		[hl readClearTextStylesFromTextView];
-		[hl highlightEverything];
-
     }
 }
 
