@@ -42,51 +42,16 @@ int our_vasprintf(char **strptr, const char *fmt, va_list argptr)
 #define YY_NAME(N) style_yy##N
 
 
-attr_argb_color *new_argb_color(int r, int g, int b, int a) {
-    attr_argb_color *c = (attr_argb_color *)malloc(sizeof(attr_argb_color));
-    c->red = r; c->green = g; c->blue = b; c->alpha = a;
-    return c;
-}
-attr_argb_color *new_argb_from_hex(long hex, bool has_alpha) {
-    // 0xaarrggbb
-    int a = has_alpha ? ((hex >> 24) & 0xFF) : 255;
-    int r = ((hex >> 16) & 0xFF);
-    int g = ((hex >> 8) & 0xFF);
-    int b = (hex & 0xFF);
-    return new_argb_color(r,g,b,a);
-}
-attr_argb_color *new_argb_from_hex_str(char *str) {
-    // "aarrggbb"
-    long num = strtol(str, NULL, 16);
-    return new_argb_from_hex(num, (strlen(str) == 8));
-}
-
-attr_value *new_attr_value() {
-    return (attr_value *)malloc(sizeof(attr_value));
-}
-
-style_attribute *new_attr(char *name, attr_type type) {
-    style_attribute *attr = (style_attribute *)malloc(sizeof(style_attribute));
-    attr->name = strdup(name);
-    attr->type = type;
-    attr->next = NULL;
-    return attr;
-}
-
-
 // Parsing context data
 typedef struct
 {
     char *input;
     int pos;
-    void (*error_callback)(char *);
+    void (*error_callback)(char*,void*);
+    void *error_callback_context;
     int styles_pos;
     style_collection *styles;
 } style_parser_data;
-
-
-
-
 
 typedef struct sem_value
 {
@@ -122,6 +87,136 @@ static sem_value *cons(sem_value *elem, sem_value *list)
     elem->next = list;
     return elem;
 }
+
+void report_error(style_parser_data *p_data, char *str, ...)
+{
+    if (p_data->error_callback == NULL)
+        return;
+    va_list argptr;
+    va_start(argptr, str);
+    char *errmsg;
+    our_vasprintf(&errmsg, str, argptr);
+    va_end(argptr);
+    p_data->error_callback(errmsg, p_data->error_callback_context);
+    free(errmsg);
+}
+
+
+
+char *trim_str(char *str)
+{
+    while (isspace(*str))
+        str++;
+    if (*str == '\0')
+        return str;
+    char *end = str + strlen(str) - 1;
+    while (end > str && isspace(*end))
+        end--;
+    *(end+1) = '\0';
+    return str;
+}
+
+char *strcpy_lower(char *str)
+{
+    char *low = strdup(str);
+    int i;
+    int len = strlen(str);
+    for (i = 0; i < len; i++)
+        *(low+i) = tolower(*(low+i));
+    return low;
+}
+
+char *standardize_str(char *str)
+{
+    return strcpy_lower(trim_str(str));
+}
+
+
+
+
+attr_argb_color *new_argb_color(int r, int g, int b, int a)
+{
+    attr_argb_color *c = (attr_argb_color *)malloc(sizeof(attr_argb_color));
+    c->red = r; c->green = g; c->blue = b; c->alpha = a;
+    return c;
+}
+attr_argb_color *new_argb_from_hex(long hex, bool has_alpha)
+{
+    // 0xaarrggbb
+    int a = has_alpha ? ((hex >> 24) & 0xFF) : 255;
+    int r = ((hex >> 16) & 0xFF);
+    int g = ((hex >> 8) & 0xFF);
+    int b = (hex & 0xFF);
+    return new_argb_color(r,g,b,a);
+}
+attr_argb_color *new_argb_from_hex_str(style_parser_data *p_data, char *str)
+{
+    // "aarrggbb"
+    int len = strlen(str);
+    if (len != 6 && len != 8) {
+        report_error(p_data,
+                     "Value '%s' is not a valid color value: it should be a "
+                     "hexadecimal number, 6 or 8 characters long.",
+                     str);
+        return NULL;
+    }
+    char *endptr = NULL;
+    long num = strtol(str, &endptr, 16);
+    if (*endptr != '\0') {
+        report_error(p_data,
+                     "Value '%s' is not a valid color value: the character "
+                     "'%c' is invalid. The color value should be a hexadecimal "
+                     "number, 6 or 8 characters long.",
+                     str, *endptr);
+        return NULL;
+    }
+    return new_argb_from_hex(num, (len == 8));
+}
+
+attr_value *new_attr_value()
+{
+    return (attr_value *)malloc(sizeof(attr_value));
+}
+
+style_attribute *new_attr(char *name, attr_type type)
+{
+    style_attribute *attr = (style_attribute *)malloc(sizeof(style_attribute));
+    attr->name = strdup(name);
+    attr->type = type;
+    attr->next = NULL;
+    return attr;
+}
+
+void free_style_attributes(style_attribute *list)
+{
+    style_attribute *cur = list;
+    while (cur != NULL)
+    {
+        if (cur->name != NULL)
+            free(cur->name);
+        if (cur->value != NULL)
+        {
+            if (cur->type == attr_type_foreground_color
+                || cur->type == attr_type_background_color
+                || cur->type == attr_type_caret_color
+                || cur->type == attr_type_selection_foreground_color
+                || cur->type == attr_type_selection_background_color)
+                free(cur->value->argb_color);
+            if (cur->type == attr_type_font_family)
+                free(cur->value->font_family);
+            if (cur->type == attr_type_other)
+                free(cur->value->string);
+            free(cur->value);
+        }
+        style_attribute *this = cur;
+        cur = cur->next;
+        free(this);
+    }
+}
+
+
+
+
 
 
 char **get_element_type_names()
@@ -187,6 +282,12 @@ attr_type attr_type_from_name(char *name)
     else IF_ATTR_NAME("foreground-color") return attr_type_foreground_color;
     else IF_ATTR_NAME("background") return attr_type_background_color;
     else IF_ATTR_NAME("background-color") return attr_type_background_color;
+    else IF_ATTR_NAME("caret") return attr_type_caret_color;
+    else IF_ATTR_NAME("caret-color") return attr_type_caret_color;
+    else IF_ATTR_NAME("selection-foreground") return attr_type_selection_foreground_color;
+    else IF_ATTR_NAME("selection-foreground-color") return attr_type_selection_foreground_color;
+    else IF_ATTR_NAME("selection-background") return attr_type_selection_background_color;
+    else IF_ATTR_NAME("selection-background-color") return attr_type_selection_background_color;
     else IF_ATTR_NAME("font-size") return attr_type_font_size_pt;
     else IF_ATTR_NAME("font-family") return attr_type_font_family;
     else IF_ATTR_NAME("font-style") return attr_type_font_style;
@@ -202,6 +303,12 @@ char *attr_name_from_type(attr_type type)
             return "foreground-color"; break;
         case attr_type_background_color:
             return "background-color"; break;
+        case attr_type_caret_color:
+            return "caret-color"; break;
+        case attr_type_selection_foreground_color:
+            return "selection-foreground-color"; break;
+        case attr_type_selection_background_color:
+            return "selection-background-color"; break;
         case attr_type_font_size_pt:
             return "font-size"; break;
         case attr_type_font_family:
@@ -216,32 +323,7 @@ char *attr_name_from_type(attr_type type)
 }
 
 
-void report_error(style_parser_data *p_data, char *str, ...)
-{
-    if (p_data->error_callback == NULL)
-        return;
-    va_list argptr;
-    va_start(argptr, str);
-    char *errmsg;
-    our_vasprintf(&errmsg, str, argptr);
-    va_end(argptr);
-    p_data->error_callback(errmsg);
-    free(errmsg);
-}
 
-
-char *trim_str(char *str)
-{
-    while (isspace(*str))
-        str++;
-    if (*str == '\0')
-        return str;
-    char *end = str + strlen(str) - 1;
-    while (end > str && isspace(*end))
-        end--;
-    *(end+1) = '\0';
-    return str;
-}
 
 
 #define EQUALS(a,b) (strcmp(a, b) == 0)
@@ -260,17 +342,29 @@ style_attribute *interpret_attributes(style_parser_data *p_data,
         attr->value = new_attr_value();
         
         if (atype == attr_type_foreground_color
-            || atype == attr_type_background_color)
+            || atype == attr_type_background_color
+            || atype == attr_type_caret_color
+            || atype == attr_type_selection_foreground_color
+            || atype == attr_type_selection_background_color)
         {
-            // todo: handle conversion errors somehow
             char *hexstr = trim_str(cur->value);
-            attr->value->argb_color = new_argb_from_hex_str(hexstr);
+            // new_argb_from_hex_str() reports conversion errors
+            attr->value->argb_color = new_argb_from_hex_str(p_data, hexstr);
+            if (attr->value->argb_color == NULL) {
+                free_style_attributes(attr);
+                attr = NULL;
+            }
         }
         else if (atype == attr_type_font_size_pt)
         {
-            // todo: trim non-digits off from value (e.g. "14pt")
-            // todo: handle conversion errors somehow
-            attr->value->font_size_pt = atoi(cur->value);
+            char *endptr = NULL;
+            attr->value->font_size_pt = (int)strtol(cur->value, &endptr, 10);
+            if (endptr == cur->value) {
+                report_error(p_data, "Value '%s' is invalid for attribute '%s'",
+                             cur->value, cur->name);
+                free_style_attributes(attr);
+                attr = NULL;
+            }
         }
         else if (atype == attr_type_font_family)
         {
@@ -278,36 +372,52 @@ style_attribute *interpret_attributes(style_parser_data *p_data,
         }
         else if (atype == attr_type_font_style)
         {
-            // todo: standardize input (trim; lowercase)
+            char *standardized_style_value = standardize_str(cur->value);
             attr_font_style style = attr_font_style_normal;
-            if (EQUALS(cur->value, "italic"))
+            
+            if (EQUALS(standardized_style_value, "italic"))
                 style = attr_font_style_italic;
-            else if (EQUALS(cur->value, "condensed"))
+            else if (EQUALS(standardized_style_value, "condensed"))
                 style = attr_font_style_condensed;
-            else
+            else {
                 report_error(p_data, "Value '%s' is invalid for attribute '%s'",
                              cur->value, cur->name);
-            attr->value->font_style = style;
+                free_style_attributes(attr);
+                attr = NULL;
+            }
+            
+            if (attr != NULL)
+                attr->value->font_style = style;
+            free(standardized_style_value);
         }
         else if (atype == attr_type_font_weight)
         {
-            // todo: standardize input (trim; lowercase)
+            char *standardized_weight_value = standardize_str(cur->value);
             attr_font_weight weight = attr_font_weight_normal;
-            if (EQUALS(cur->value, "bold"))
+            
+            if (EQUALS(standardized_weight_value, "bold"))
                 weight = attr_font_weight_bold;
-            else
+            else {
                 report_error(p_data, "Value '%s' is invalid for attribute '%s'",
                              cur->value, cur->name);
-            attr->value->font_weight = weight;
+                free_style_attributes(attr);
+                attr = NULL;
+            }
+            
+            if (attr != NULL)
+                attr->value->font_weight = weight;
+            free(standardized_weight_value);
         }
         else if (atype == attr_type_other)
         {
             attr->value->string = strdup(cur->value);
         }
         
-        // add to linked list
-        attr->next = attrs;
-        attrs = attr;
+        if (attr != NULL) {
+            // add to linked list
+            attr->next = attrs;
+            attrs = attr;
+        }
         
         cur = cur->next;
     }
@@ -372,11 +482,12 @@ StyleDef =      x:StartList
                   free_sem_values(l);
                 }
 
-StyleLabel =    < ("editor"|StyleLabelChar+) >
+StyleLabel =    Indent < ("editor"|StyleLabelChar+) >
                 { $$ = SEMVAL; }
+                Sp AssignOp?
                 
 
-StyleAttrLine = Indent? a:StyleAttr Sp (LineComment|Newline|Eof)
+StyleAttrLine = Indent a:StyleAttr Sp (LineComment|Newline|Eof)
                 { $$ = a; }
 
 AssignOp =      ':'|'='
@@ -391,7 +502,7 @@ StyleLabelChar = [A-Z0-9_]
 AttrNameChar =  [A-Za-z0-9-]
 AttrValueChar = (!Newline !Eof !BeginLineComment .)
 
-Indent =        "\t" | "    "
+Indent =        ("\t" | " ")*
 BlankLine =     Sp Newline
 Eof =           !.
 Spacechar =     ' ' | '\t'
@@ -430,6 +541,16 @@ style_collection *new_style_collection()
     return sc;
 }
 
+void free_style_collection(style_collection *coll)
+{
+    free_style_attributes(coll->editor_styles);
+    int i;
+    for (i = 0; i < NUM_LANG_TYPES; i++)
+        free_style_attributes(coll->element_styles[i]);
+    free(coll->element_styles);
+    free(coll);
+}
+
 style_parser_data *new_style_parser_data(char *input)
 {
     style_parser_data *p_data = (style_parser_data*)
@@ -441,50 +562,18 @@ style_parser_data *new_style_parser_data(char *input)
     return p_data;
 }
 
-style_collection *parse_styles(char *input, void(*error_callback)(char*))
+style_collection *parse_styles(char *input, void(*error_callback)(char*,void*),
+                               void *error_callback_context)
 {
     style_parser_data *p_data = new_style_parser_data(input);
     p_data->error_callback = error_callback;
+    p_data->error_callback_context = error_callback_context;
     
     _sty_parse(p_data);
     
     style_collection *ret = p_data->styles;
     free(p_data);
     return ret;
-}
-
-void free_style_attributes(style_attribute *list)
-{
-    style_attribute *cur = list;
-    while (cur != NULL)
-    {
-        if (cur->name != NULL)
-            free(cur->name);
-        if (cur->value != NULL)
-        {
-            if (cur->type == attr_type_foreground_color
-                || cur->type == attr_type_background_color)
-                free(cur->value->argb_color);
-            if (cur->type == attr_type_font_family)
-                free(cur->value->font_family);
-            if (cur->type == attr_type_other)
-                free(cur->value->string);
-            free(cur->value);
-        }
-        style_attribute *this = cur;
-        cur = cur->next;
-        free(this);
-    }
-}
-
-void free_style_collection(style_collection *coll)
-{
-    free_style_attributes(coll->editor_styles);
-    int i;
-    for (i = 0; i < NUM_LANG_TYPES; i++)
-        free_style_attributes(coll->element_styles[i]);
-    free(coll->element_styles);
-    free(coll);
 }
 
 

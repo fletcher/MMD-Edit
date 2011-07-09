@@ -35,6 +35,7 @@
 	char *currentHighlightText;
 	BOOL workerThreadResultsInvalid;
 	BOOL styleDependenciesPending;
+	NSMutableArray *styleParsingErrors;
 	BOOL highlightingIsDirty;
 }
 
@@ -117,6 +118,12 @@
  * call, this method will be called automatically at that time.
  */
 - (void) readClearTextStylesFromTextView;
+
+/** \brief todo
+ */
+- (void) applyStylesFromStylesheet:(NSString *)stylesheet
+				 withErrorDelegate:(id)delegate
+					 errorSelector:(SEL)selector;
 
 /** \brief Manually invoke parsing and highlighting of the NSTextView contents. */
 - (void) parseAndHighlightNow;
