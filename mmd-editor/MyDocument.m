@@ -3,12 +3,12 @@
 //  mmd-editor
 //
 //  Created by Fletcher T. Penney on 6/29/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Fletcher T. Penney. All rights reserved.
 //
 
 #import "MyDocument.h"
 #import "HGMarkdownHighlightingStyle.h"
-#import "HGMarkdownHighlighter.h"
+#import "FTPMultiMarkdownHighlighter.h"
 
 @implementation MyDocument
 
@@ -52,7 +52,7 @@
 		[[textView textStorage] setAttributedString: [self string]];
 		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];
 		
-		hl = [[HGMarkdownHighlighter alloc] init];
+		hl = [[FTPMultiMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
