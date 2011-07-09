@@ -34,6 +34,8 @@
 - (IBAction)formatMetaData:(id)sender;
 - (IBAction)formatTables:(id)sender;
 
+//- (void) handleStyleParsingErrors:(NSArray *)errorMessages;
+
 @property BOOL isMMD;
 
 @end

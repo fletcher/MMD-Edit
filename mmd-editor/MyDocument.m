@@ -37,6 +37,25 @@
     return @"MyDocument";
 }
 
+- (void) handleStyleParsingErrors:(NSArray *)errorMessages
+{
+	NSMutableString *errorsInfo = [NSMutableString string];
+	for (NSString *str in errorMessages)
+	{
+		[errorsInfo appendString:@"• "];
+		[errorsInfo appendString:str];
+		[errorsInfo appendString:@"\n"];
+	}
+	
+	NSAlert *alert = [NSAlert alertWithMessageText:@"There were some errors when parsing the stylesheet:"
+									 defaultButton:@"Ok"
+								   alternateButton:nil
+									   otherButton:nil
+						 informativeTextWithFormat:errorsInfo];
+	[alert runModal];
+}
+
+
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
@@ -57,10 +76,23 @@
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
 		hl.makeLinksClickable = YES;
-				
-		self.isMMD = YES;
 		
 		[hl activate];
+
+		NSString *styleName = @"error";
+		NSString *styleFilePath = [[NSBundle mainBundle] pathForResource:styleName
+																  ofType:@"style"];
+		NSString *styleContents = [NSString stringWithContentsOfFile:styleFilePath
+															encoding:NSUTF8StringEncoding
+															   error:NULL];
+
+		
+//		[hl applyStylesFromStylesheet:styleContents
+//					 withErrorDelegate:self
+//						 errorSelector:@selector(handleStyleParsingErrors:)];		
+		
+		self.isMMD = YES;
+		
 	}
 }
 
@@ -161,6 +193,8 @@
 		[hl clearHighlighting];
 		[hl readClearTextStylesFromTextView];
     }
+		
+	
 }
 
 - (IBAction)tidyRulers:(id)sender
@@ -327,7 +361,6 @@
 	
 	[textView didChangeText];
 }
-
 
 
 @end

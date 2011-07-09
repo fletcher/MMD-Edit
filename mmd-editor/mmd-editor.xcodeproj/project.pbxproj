@@ -12,6 +12,11 @@
 		5A47A19F13BBF658008DE4CC /* HGMarkdownHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A47A19C13BBF658008DE4CC /* HGMarkdownHighlighter.m */; };
 		5A47A1A013BBF658008DE4CC /* HGMarkdownHighlightingStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A47A19E13BBF658008DE4CC /* HGMarkdownHighlightingStyle.m */; };
 		5A47A1A413BBF675008DE4CC /* markdown_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A47A1A213BBF675008DE4CC /* markdown_parser.c */; };
+		5A69086513C8EAA200995340 /* styleparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A69085E13C8EAA200995340 /* styleparser.c */; };
+		5A69086613C8EAA200995340 /* error.style in Resources */ = {isa = PBXBuildFile; fileRef = 5A69086113C8EAA200995340 /* error.style */; };
+		5A69086713C8EAA200995340 /* solarized-dark.style in Resources */ = {isa = PBXBuildFile; fileRef = 5A69086213C8EAA200995340 /* solarized-dark.style */; };
+		5A69086813C8EAA200995340 /* solarized-light.style in Resources */ = {isa = PBXBuildFile; fileRef = 5A69086313C8EAA200995340 /* solarized-light.style */; };
+		5A69086913C8EAA200995340 /* teststyle.style in Resources */ = {isa = PBXBuildFile; fileRef = 5A69086413C8EAA200995340 /* teststyle.style */; };
 		5AA14DEE13C27654002D188D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA14DED13C27654002D188D /* WebKit.framework */; };
 		5AF8DE6513C8AA23001B412C /* FTPMultiMarkdownHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AF8DE6413C8AA23001B412C /* FTPMultiMarkdownHighlighter.m */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
@@ -41,6 +46,12 @@
 		5A47A1A213BBF675008DE4CC /* markdown_parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = markdown_parser.c; sourceTree = "<group>"; };
 		5A47A1AB13BBF6A7008DE4CC /* markdown_definitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = markdown_definitions.h; sourceTree = "<group>"; };
 		5A47A1AC13BBF6A7008DE4CC /* markdown_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = markdown_parser.h; sourceTree = "<group>"; };
+		5A69085E13C8EAA200995340 /* styleparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = styleparser.c; path = "../../../Active/MMD-Editor/styleparser/styleparser.c"; sourceTree = SOURCE_ROOT; };
+		5A69085F13C8EAA200995340 /* styleparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = styleparser.h; path = "../../../Active/MMD-Editor/styleparser/styleparser.h"; sourceTree = SOURCE_ROOT; };
+		5A69086113C8EAA200995340 /* error.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = error.style; path = "../../../Active/MMD-Editor/styleparser/styles/error.style"; sourceTree = "<group>"; };
+		5A69086213C8EAA200995340 /* solarized-dark.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "solarized-dark.style"; path = "../../../Active/MMD-Editor/styleparser/styles/solarized-dark.style"; sourceTree = "<group>"; };
+		5A69086313C8EAA200995340 /* solarized-light.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "solarized-light.style"; path = "../../../Active/MMD-Editor/styleparser/styles/solarized-light.style"; sourceTree = "<group>"; };
+		5A69086413C8EAA200995340 /* teststyle.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = teststyle.style; path = "../../../Active/MMD-Editor/styleparser/styles/teststyle.style"; sourceTree = "<group>"; };
 		5AA14DED13C27654002D188D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		5AF8DE6313C8AA23001B412C /* FTPMultiMarkdownHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FTPMultiMarkdownHighlighter.h; path = "../../../Active/MMD-Editor/mmd-editor/FTPMultiMarkdownHighlighter.h"; sourceTree = SOURCE_ROOT; };
 		5AF8DE6413C8AA23001B412C /* FTPMultiMarkdownHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FTPMultiMarkdownHighlighter.m; path = "../../../Active/MMD-Editor/mmd-editor/FTPMultiMarkdownHighlighter.m"; sourceTree = SOURCE_ROOT; };
@@ -110,6 +121,9 @@
 				5A47A19E13BBF658008DE4CC /* HGMarkdownHighlightingStyle.m */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
+				5A69085E13C8EAA200995340 /* styleparser.c */,
+				5A69085F13C8EAA200995340 /* styleparser.h */,
+				5A69086013C8EAA200995340 /* styles */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -129,6 +143,10 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5A69086413C8EAA200995340 /* teststyle.style */,
+				5A69086113C8EAA200995340 /* error.style */,
+				5A69086213C8EAA200995340 /* solarized-dark.style */,
+				5A69086313C8EAA200995340 /* solarized-light.style */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* mmd_editor-Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -147,6 +165,14 @@
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
+		};
+		5A69086013C8EAA200995340 /* styles */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = styles;
+			path = "../../../Active/MMD-Editor/styleparser/styles";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -202,6 +228,10 @@
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
+				5A69086613C8EAA200995340 /* error.style in Resources */,
+				5A69086713C8EAA200995340 /* solarized-dark.style in Resources */,
+				5A69086813C8EAA200995340 /* solarized-light.style in Resources */,
+				5A69086913C8EAA200995340 /* teststyle.style in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +248,7 @@
 				5A47A1A013BBF658008DE4CC /* HGMarkdownHighlightingStyle.m in Sources */,
 				5A47A1A413BBF675008DE4CC /* markdown_parser.c in Sources */,
 				5AF8DE6513C8AA23001B412C /* FTPMultiMarkdownHighlighter.m in Sources */,
+				5A69086513C8EAA200995340 /* styleparser.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

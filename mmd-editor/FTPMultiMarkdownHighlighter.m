@@ -20,7 +20,7 @@
 	return self;
 }
 
-- (NSArray *) getDefaultStyles
+- (NSArray *) getDefaultStyles2
 {
 	static NSArray *defaultStyles = nil;
 	if (defaultStyles != nil)
