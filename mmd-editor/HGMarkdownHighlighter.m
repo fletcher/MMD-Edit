@@ -505,6 +505,13 @@
 	if (scrollView != nil)
 	{
 		[[scrollView contentView] setPostsBoundsChangedNotifications: YES];
+		[[scrollView contentView] setPostsFrameChangedNotifications:YES];
+		[[NSNotificationCenter defaultCenter]
+		 addObserver:self
+		 selector:@selector(textViewDidScroll:)
+		 name:NSViewFrameDidChangeNotification
+		 object:[scrollView contentView]
+		 ];
 		[[NSNotificationCenter defaultCenter]
 		 addObserver:self
 		 selector:@selector(textViewDidScroll:)
