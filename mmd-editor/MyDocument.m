@@ -55,7 +55,7 @@
 		hl = [[HGMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
-		hl.waitInterval = 0.1;
+		hl.waitInterval = 0.3;
 		hl.makeLinksClickable = YES;
 				
 		self.isMMD = YES;
