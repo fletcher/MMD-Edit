@@ -343,7 +343,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomObject" id="892134846">
-				<string key="NSClassName">HGMarkdownHighlighter</string>
+				<string key="NSClassName">FTPMultiMarkdownHighlighter</string>
 			</object>
 			<object class="NSWindowTemplate" id="221736679">
 				<int key="NSWindowStyleMask">31</int>
@@ -784,6 +784,22 @@
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">FTPMultiMarkdownHighlighter</string>
+					<string key="superclassName">HGMarkdownHighlighter</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../../Active/MMD-Editor/mmd-editor/FTPMultiMarkdownHighlighter.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">FTPMultiMarkdownHighlighter</string>
+					<string key="superclassName">HGMarkdownHighlighter</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBUserSource</string>
+						<string key="minorKey"/>
+					</object>
+				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">HGMarkdownHighlighter</string>
 					<string key="superclassName">NSObject</string>
