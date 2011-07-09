@@ -87,10 +87,10 @@
 															   error:NULL];
 
 		
-//		[hl applyStylesFromStylesheet:styleContents
-//					 withErrorDelegate:self
-//						 errorSelector:@selector(handleStyleParsingErrors:)];		
-		
+/*		[hl applyStylesFromStylesheet:styleContents
+					 withErrorDelegate:self
+						 errorSelector:@selector(handleStyleParsingErrors:)];		
+*/		
 		self.isMMD = YES;
 		
 	}
