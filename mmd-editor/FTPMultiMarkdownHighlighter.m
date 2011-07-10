@@ -15,7 +15,9 @@
 	if (!(self = [super init]))
 		return nil;
 	
-	self.extensions = self.extensions | EXT_MMD;
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useMultiMarkdown"]) {
+		self.extensions = self.extensions | EXT_MMD;
+	}
 
 	return self;
 }

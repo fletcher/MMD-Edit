@@ -33,9 +33,13 @@
 + (void)initialize
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *appDefaults = [NSDictionary
-								 dictionaryWithObject:@"fletcher" forKey:@"defaultStyleSheet"];
-    [defaults registerDefaults:appDefaults];
+
+	// Set default styleSheet
+	[defaults setValue:@"fletcher" forKey:@"defaultStyleSheet"];
+	
+	// Use MultiMarkdown by default
+	[defaults setBool:YES
+			   forKey:@"useMultiMarkdown"];
 }
 
 - (NSString *)windowNibName

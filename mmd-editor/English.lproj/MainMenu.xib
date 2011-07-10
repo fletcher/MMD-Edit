@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="532"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1328,9 +1329,8 @@
 						<object class="NSPopUpButton" id="777513954">
 							<reference key="NSNextResponder" ref="90959551"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{105, 373}, {261, 26}}</string>
+							<string key="NSFrame">{{117, 373}, {261, 26}}</string>
 							<reference key="NSSuperview" ref="90959551"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSPopUpButtonCell" key="NSCell" id="255424613">
 								<int key="NSCellFlags">-2076049856</int>
@@ -1399,14 +1399,13 @@
 						<object class="NSTextField" id="549376501">
 							<reference key="NSNextResponder" ref="90959551"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{17, 379}, {86, 17}}</string>
+							<string key="NSFrame">{{29, 379}, {86, 17}}</string>
 							<reference key="NSSuperview" ref="90959551"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="105616212">
 								<int key="NSCellFlags">68288064</int>
 								<int key="NSCellFlags2">71304192</int>
-								<string key="NSContents">StyleSheet</string>
+								<string key="NSContents">Style Sheet</string>
 								<reference key="NSSupport" ref="969183395"/>
 								<reference key="NSControlView" ref="549376501"/>
 								<object class="NSColor" key="NSBackgroundColor">
@@ -1429,10 +1428,36 @@
 								</object>
 							</object>
 						</object>
+						<object class="NSButton" id="646903460">
+							<reference key="NSNextResponder" ref="90959551"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{42, 341}, {203, 18}}</string>
+							<reference key="NSSuperview" ref="90959551"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSButtonCell" key="NSCell" id="528882975">
+								<int key="NSCellFlags">-2080244224</int>
+								<int key="NSCellFlags2">67108864</int>
+								<string key="NSContents">Use MultiMarkdown Syntax</string>
+								<reference key="NSSupport" ref="969183395"/>
+								<reference key="NSControlView" ref="646903460"/>
+								<int key="NSButtonFlags">1211912703</int>
+								<int key="NSButtonFlags2">2</int>
+								<object class="NSCustomResource" key="NSNormalImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">NSSwitch</string>
+								</object>
+								<object class="NSButtonImageSource" key="NSAlternateImage">
+									<string key="NSImageName">NSSwitch</string>
+								</object>
+								<string key="NSAlternateContents"/>
+								<string key="NSKeyEquivalent"/>
+								<int key="NSPeriodicDelay">200</int>
+								<int key="NSPeriodicInterval">25</int>
+							</object>
+						</object>
 					</object>
 					<string key="NSFrameSize">{548, 416}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -1440,9 +1465,7 @@
 			<object class="NSUserDefaultsController" id="49149412">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>def</string>
-					<string>default</string>
-					<string>defaultStyleSheet</string>
+					<string>useMultiMarkdown</string>
 				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
@@ -2172,6 +2195,22 @@
 						</object>
 					</object>
 					<int key="connectionID">557</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.useMultiMarkdown</string>
+						<reference key="source" ref="528882975"/>
+						<reference key="destination" ref="49149412"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="528882975"/>
+							<reference key="NSDestination" ref="49149412"/>
+							<string key="NSLabel">value: values.useMultiMarkdown</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.useMultiMarkdown</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">580</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3214,6 +3253,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="549376501"/>
 							<reference ref="777513954"/>
+							<reference ref="646903460"/>
 						</object>
 						<reference key="parent" ref="76801920"/>
 					</object>
@@ -3284,6 +3324,20 @@
 						<int key="objectID">574</int>
 						<reference key="object" ref="105616212"/>
 						<reference key="parent" ref="549376501"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">575</int>
+						<reference key="object" ref="646903460"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="528882975"/>
+						</object>
+						<reference key="parent" ref="90959551"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">576</int>
+						<reference key="object" ref="528882975"/>
+						<reference key="parent" ref="646903460"/>
 					</object>
 				</object>
 			</object>
@@ -3523,6 +3577,9 @@
 					<string>573.IBPluginDependency</string>
 					<string>573.IBViewBoundsToFrameTransform</string>
 					<string>574.IBPluginDependency</string>
+					<string>575.IBPluginDependency</string>
+					<string>575.IBViewBoundsToFrameTransform</string>
+					<string>576.IBPluginDependency</string>
 					<string>58.IBPluginDependency</string>
 					<string>58.ImportedFromIB2</string>
 					<string>72.IBPluginDependency</string>
@@ -3771,7 +3828,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDAwAAw8YAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABDcgAAw8YAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{383, 714}, {261, 63}}</string>
@@ -3788,6 +3845,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABBiAAAw8UAAA</bytes>
+					</object>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">P4AAAL+AAABCKAAAw7KAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3836,7 +3898,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">574</int>
+			<int key="maxID">580</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4703,11 +4765,13 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>NSMenuCheckmark</string>
 				<string>NSMenuMixedState</string>
+				<string>NSSwitch</string>
 			</object>
 			<object class="NSMutableArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>{9, 8}</string>
 				<string>{7, 2}</string>
+				<string>{15, 15}</string>
 			</object>
 		</object>
 	</data>
