@@ -15,9 +15,12 @@
 
 @interface FTPMultiMarkdownHighlighter : HGMarkdownHighlighter {
 
+	NSDictionary *currentLineAttributes;
+	
 @private
 
 }
 
+@property(retain) NSDictionary *currentLineAttributes;
 
 @end

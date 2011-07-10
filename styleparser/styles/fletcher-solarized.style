@@ -26,8 +26,7 @@
 
 
 editor
-foreground: 657b83 # base00
-background: fdf6e3 # base3
+foreground: 657b83 # base00 background: fdf6e3 # base3
 caret: 002b36 # base03
 
 H1
@@ -130,3 +129,6 @@ background: eee8d5 # base2
 
 DEFINITION
 foreground: 93a1a1 # base1
+
+CURRENT
+background: dc322f # base2 

@@ -10,57 +10,74 @@
 
 @implementation FTPMultiMarkdownHighlighter
 
+@synthesize currentLineAttributes;
+
 - (id) init
 {
 	if (!(self = [super init]))
 		return nil;
 	
 	self.extensions = self.extensions | EXT_MMD;
+	self.currentLineAttributes = nil;
 
 	return self;
 }
 
-- (NSArray *) getDefaultStyles
+
+
+// - (NSRange)textView:(NSTextView *)theTextView
+// willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange
+ //  toCharacterRange:(NSRange)newSelectedCharRange;
+
+- (void) textViewDidChangeSelection:(NSNotification *)notification
 {
-	static NSArray *defaultStyles = nil;
-	if (defaultStyles != nil)
-		return defaultStyles;
+	id editor;
+	editor = [notification object];
 	
-	defaultStyles = [[NSArray arrayWithObjects:
-					  HG_MKSTYLE(H1, HG_D(HG_COLOR_HEX(0x222222),HG_FORE, HG_COLOR_HEX(0xCCCCCC),HG_BACK), nil, NSBoldFontMask),
-					  HG_MKSTYLE(H2, HG_D(HG_COLOR_HEX(0x222222),HG_FORE, HG_COLOR_HEX(0xCCCCCC),HG_BACK), nil, NSBoldFontMask),
-					  HG_MKSTYLE(H3, HG_D(HG_COLOR_HEX(0x222222),HG_FORE, HG_COLOR_HEX(0xCCCCCC),HG_BACK), nil, NSBoldFontMask),
-					  HG_MKSTYLE(H4, HG_D(HG_COLOR_HEX(0x222222),HG_FORE, HG_COLOR_HEX(0xCCCCCC),HG_BACK), nil, NSBoldFontMask),
-					  HG_MKSTYLE(H5, HG_D(HG_COLOR_HEX(0x222222),HG_FORE, HG_COLOR_HEX(0xCCCCCC),HG_BACK), nil, NSBoldFontMask),
-					  HG_MKSTYLE(H6, HG_D(HG_COLOR_HEX(0x222222),HG_FORE, HG_COLOR_HEX(0xCCCCCC),HG_BACK), nil, NSBoldFontMask),
-					  HG_MKSTYLE(HRULE, HG_D(HG_DARK_GRAY,HG_FORE, HG_LIGHT_GRAY,HG_BACK), nil, 0),
-					  HG_MKSTYLE(LIST_BULLET, HG_D(HG_DARK(HG_MAGENTA),HG_FORE), nil, 0),
-					  HG_MKSTYLE(LIST_ENUMERATOR, HG_D(HG_DARK(HG_MAGENTA),HG_FORE), nil, 0),
-					  HG_MKSTYLE(LINK, HG_D(HG_DARK(HG_CYAN),HG_FORE, HG_LIGHT(HG_CYAN),HG_BACK), nil, 0),
-					  HG_MKSTYLE(AUTO_LINK_URL, HG_D(HG_DARK(HG_CYAN),HG_FORE, HG_LIGHT(HG_CYAN),HG_BACK), nil, 0),
-					  HG_MKSTYLE(AUTO_LINK_EMAIL, HG_D(HG_DARK(HG_CYAN),HG_FORE, HG_LIGHT(HG_CYAN),HG_BACK), nil, 0),
-					  HG_MKSTYLE(IMAGE, HG_D(HG_DARK(HG_MAGENTA),HG_FORE, HG_LIGHT(HG_MAGENTA),HG_BACK), nil, 0),
-					  HG_MKSTYLE(REFERENCE, HG_D(HG_DIM(HG_RED),HG_FORE), nil, 0),
-					  HG_MKSTYLE(CODE, HG_D(HG_DARK(HG_GREEN),HG_FORE, HG_LIGHT(HG_GREEN),HG_BACK), nil, 0),
-					  HG_MKSTYLE(EMPH, HG_D(HG_DARK(HG_YELLOW),HG_FORE), nil, NSItalicFontMask),
-					  HG_MKSTYLE(STRONG, HG_D(HG_DARK(HG_MAGENTA),HG_FORE), nil, NSBoldFontMask),
-					  HG_MKSTYLE(HTML_ENTITY, HG_D(HG_MED_GRAY,HG_FORE), nil, 0),
-					  HG_MKSTYLE(COMMENT, HG_D(HG_MED_GRAY,HG_FORE), nil, 0),
-					  HG_MKSTYLE(VERBATIM, HG_D(HG_DARK(HG_GREEN),HG_FORE, HG_LIGHT(HG_GREEN),HG_BACK), nil, 0),
-					  HG_MKSTYLE(BLOCKQUOTE, HG_D(HG_DARK(HG_MAGENTA),HG_FORE), HG_A(HG_BACK), NSUnboldFontMask),
-					  HG_MKSTYLE(METADATA, HG_D(HG_COLOR_HEX(0x222222),HG_FORE, HG_COLOR_HEX(0xE8E8E8),HG_BACK), nil, 0),
-					  HG_MKSTYLE(METAKEY, HG_D(HG_COLOR_HEX(0x777777),HG_FORE), HG_A(HG_FORE), 0),
-					  HG_MKSTYLE(CITATION, HG_D(HG_DIM(HG_RED),HG_FORE), nil, 0),
-					  HG_MKSTYLE(MATHSPAN, HG_D(HG_DARK(HG_GREEN),HG_FORE, HG_LIGHT(HG_GREEN),HG_BACK), nil, 0),
-					  HG_MKSTYLE(TABLE, HG_D(HG_COLOR_HEX(0x777777),HG_FORE, HG_COLOR_HEX(0xE8E8E8),HG_BACK), nil, 0),
-					  //		HG_MKSTYLE(TABLEROW, HG_D(HG_DARK(HG_GREEN),HG_FORE, HG_LIGHT(HG_RED),HG_BACK), nil, 0),
-					  //		HG_MKSTYLE(CELLCONTENTS, HG_D(HG_DARK(HG_BLUE),HG_FORE, HG_LIGHT(HG_BLUE),HG_BACK), nil, 0),
-					  HG_MKSTYLE(DEFTERM, HG_D(HG_DARK(HG_BLUE),HG_FORE), nil, NSItalicFontMask),
-					  HG_MKSTYLE(DEFINITION, HG_D(HG_DARK(HG_RED),HG_FORE), nil, 0),
-					  nil] retain];
-	
-	return defaultStyles;
+	if((editor != nil) && ([editor isKindOfClass:[NSTextView class]]
+						   == YES))
+	{
+
+		// Highlight current line/paragraph?
+		
+		NSMutableAttributedString *attrStr = [editor textStorage];
+		NSRange currentPara = [editor rangeForUserParagraphAttributeChange];
+		
+		NSLog(@"range length: %d", currentPara.length);
+	//	[attrStr addAttributes:[[editor delegate] currentLineAttributes] range:currentPara];
+
+		
+		NSFont *myFont = [NSFont fontWithName:@"courier" size:13];
+		NSMutableDictionary* typingAttributes = [[editor typingAttributes] mutableCopy];
+		[typingAttributes setObject:myFont forKey:NSFontAttributeName];
+		
+		
+		
+		[editor setTypingAttributes:[[editor delegate]
+									 defaultTypingAttributes]];
+		[attrStr addAttributes:typingAttributes range:currentPara];
+		
+		[[editor delegate] applyVisibleRangeHighlighting];
+	//	[self.targetTextView didChangeText];
+
+	}
 }
 
+- (void) applyStylesFromStylesheet:(NSString *)stylesheet
+				 withErrorDelegate:(id)errorDelegate
+					 errorSelector:(SEL)errorSelector
+{
+	[super applyStylesFromStylesheet:stylesheet
+					   withErrorDelegate:errorDelegate
+						   errorSelector:errorSelector];
+	
+	for (HGMarkdownHighlightingStyle *style in self.styles)
+	{
+		if (style.elementType == CURRENT) {
+			NSLog(@"loaded current");
+			self.currentLineAttributes = style.attributesToAdd;
+		}
+	}
+}
 
 @end

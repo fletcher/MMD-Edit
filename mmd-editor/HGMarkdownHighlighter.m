@@ -258,12 +258,24 @@ void styleparsing_error_callback(char *error_message, void *context_data)
 	[[self.targetTextView textStorage] beginEditing];
 	[self clearHighlightingForRange:range];
 	
+	
 	NSMutableAttributedString *attrStr = [self.targetTextView textStorage];
 	unsigned long sourceLength = [attrStr length];
 	
 	for (HGMarkdownHighlightingStyle *style in self.styles)
 	{
 		element *cursor = elements[style.elementType];
+		if (style.elementType == CURRENT)
+		{
+			NSLog(@"found Current; %d", CURRENT);
+			// Highlight current line/paragraph?
+			NSRange currentPara = [self.targetTextView rangeForUserParagraphAttributeChange];
+			
+	//		[attrStr addAttributes:style.attributesToAdd range:currentPara];
+		}				
+		else {
+//			NSLog(@"checked %d",style.elementType);
+		}
 		
 		while (cursor != NULL)
 		{
@@ -312,7 +324,10 @@ void styleparsing_error_callback(char *error_message, void *context_data)
 			
 			cursor = cursor->next;
 		}
+
 	}
+
+
 	
 	[[self.targetTextView textStorage] endEditing];
 }
@@ -428,7 +443,7 @@ void styleparsing_error_callback(char *error_message, void *context_data)
 		HG_MKSTYLE(MATHSPAN, HG_D(HG_DARK(HG_GREEN),HG_FORE, HG_LIGHT(HG_GREEN),HG_BACK), nil, 0),
 		HG_MKSTYLE(TABLE, HG_D(HG_DARK(HG_RED),HG_FORE, HG_LIGHT(HG_RED),HG_BACK), nil, 0),
 //		HG_MKSTYLE(TABLEROW, HG_D(HG_DARK(HG_GREEN),HG_FORE, HG_LIGHT(HG_RED),HG_BACK), nil, 0),
-//		HG_MKSTYLE(CELLCONTENTS, HG_D(HG_DARK(HG_BLUE),HG_FORE, HG_LIGHT(HG_BLUE),HG_BACK), nil, 0),
+		HG_MKSTYLE(CELLCONTENTS, HG_D(HG_DARK(HG_BLUE),HG_FORE, HG_LIGHT(HG_BLUE),HG_BACK), nil, 0),
 		HG_MKSTYLE(DEFTERM, HG_D(HG_DARK(HG_BLUE),HG_FORE), nil, NSItalicFontMask),
 		HG_MKSTYLE(DEFINITION, HG_D(HG_DARK(HG_RED),HG_FORE), nil, 0),
 		nil] retain];
