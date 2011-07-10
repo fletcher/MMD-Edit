@@ -1,0 +1,132 @@
+# Default MMD style #
+# by Fletcher T. Penney #
+
+# Built from ground up based on the solarized palette #
+
+# http://ethanschoonover.com/solarized
+
+#	SOLARIZED   HEX    
+#	base03      #002b36
+#	base02      #073642
+#	base01      #586e75
+#	base00      #657b83
+#	base0       #839496
+#	base1       #93a1a1
+#	base2       #eee8d5
+#	base3       #fdf6e3
+#	yellow      #b58900
+#	orange      #cb4b16
+#	red         #dc322f
+#	magenta     #d33682
+#	violet      #6c71c4
+#	blue        #268bd2
+#	cyan        #2aa198
+#	green       #859900
+
+
+
+editor
+foreground: 657b83 # base00
+background: fdf6e3 # base3
+caret: 002b36 # base03
+
+H1
+foreground: 586e75 # base01 
+background: eee8d5 # base2
+font-weight: bold
+
+H2
+foreground: 586e75 # base01 
+background: eee8d5 # base2
+font-weight: bold
+
+H3
+foreground: 586e75 # base01 
+background: eee8d5 # base2
+font-weight: bold
+
+H4
+foreground: 586e75 # base01 
+background: eee8d5 # base2
+font-weight: bold
+
+H5
+foreground: 586e75 # base01 
+background: eee8d5 # base2
+font-weight: bold
+
+H6
+foreground: 586e75 # base01 
+background: eee8d5 # base2
+font-weight: bold
+
+HRULE
+foreground: 586e75 # base01
+
+LIST_BULLET
+foreground: b58900 # yellow
+
+LIST_ENUMERATOR
+foreground: b58900 # yellow
+
+LINK
+foreground: 2aa198 # cyan
+
+AUTO_LINK_URL
+foreground: 2aa198 # cyan
+
+AUTO_LINK_EMAIL
+foreground: 2aa198 # cyan
+
+IMAGE
+foreground: 268bd2 # blue
+
+REFERENCE
+foreground: 80b58900 # yellow, reduced alpha
+background: eee8d5 # base2 
+
+CODE
+foreground: 2aa198 # cyan
+
+EMPH
+foreground: 268bd2 # blue
+font-style: italic
+
+STRONG
+foreground: dc322f # red
+font-weight: bold
+
+HTML_ENTITY
+foreground: 6c71c4 # violet
+
+COMMENT
+foreground: 93a1a1 # base1
+
+VERBATIM
+foreground: 2aa198 # cyan
+background: eee8d5 # base2
+
+BLOCKQUOTE
+foreground: dc322f # red
+
+METADATA
+foreground: 93a1a1 # base1
+background: eee8d5 # base2 
+
+METAKEY
+foreground: 93a1a1 # base1
+
+CITATION
+foreground: dc322f
+
+MATHSPAN
+foreground: 2aa198 # cyan
+
+TABLE
+background: eee8d5 # base2
+
+DEFTERM
+background: eee8d5 # base2
+
+DEFINITION
+foreground: 93a1a1 # base1

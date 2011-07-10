@@ -79,7 +79,7 @@
 		
 		[hl activate];
 
-		NSString *styleName = @"fletcher";
+		NSString *styleName = @"fletcher-solarized";
 		NSString *styleFilePath = [[NSBundle mainBundle] pathForResource:styleName
 																  ofType:@"style"];
 		NSString *styleContents = [NSString stringWithContentsOfFile:styleFilePath
