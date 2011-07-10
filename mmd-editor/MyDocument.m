@@ -77,9 +77,8 @@
 		hl.waitInterval = 0.3;
 		hl.makeLinksClickable = YES;
 		
-		[hl activate];
 
-		NSString *styleName = @"fletcher-solarized";
+		NSString *styleName = @"fletcher";
 		NSString *styleFilePath = [[NSBundle mainBundle] pathForResource:styleName
 																  ofType:@"style"];
 		NSString *styleContents = [NSString stringWithContentsOfFile:styleFilePath
@@ -90,6 +89,7 @@
 		[hl applyStylesFromStylesheet:styleContents
 					 withErrorDelegate:self
 						 errorSelector:@selector(handleStyleParsingErrors:)];		
+		[hl activate];
 		
 		self.isMMD = YES;
 		
@@ -131,10 +131,7 @@
     }
 }
 
-- (void) textDidChange: (NSNotification *) notification
-{
-    [self setString: [textView textStorage]];
-}
+
 
 - (NSString *)htmlForText
 {

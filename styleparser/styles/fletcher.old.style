@@ -1,0 +1,107 @@
+# Default MMD style #
+# by Fletcher T. Penney
+
+editor
+foreground: 000000 # black
+background: ffffff # white
+caret: ffffff
+
+H1
+foreground: 222222 
+background: cccccc
+font-weight: bold
+
+H2
+foreground: 222222 
+background: cccccc
+font-weight: bold
+
+H3
+foreground: 222222 
+background: cccccc
+font-weight: bold
+
+H4
+foreground: 222222 
+background: cccccc
+font-weight: bold
+
+H5
+foreground: 222222 
+background: cccccc
+font-weight: bold
+
+H6
+foreground: 222222 
+background: cccccc
+font-weight: bold
+
+HRULE
+foreground: 586e75 # base01
+
+LIST_BULLET
+foreground: b58900 # yellow
+
+LIST_ENUMERATOR
+foreground: b58900 # yellow
+
+LINK
+foreground: 2aa198 # cyan
+
+AUTO_LINK_URL
+foreground: 2aa198 # cyan
+
+AUTO_LINK_EMAIL
+foreground: 2aa198 # cyan
+
+IMAGE
+foreground: d33682 # magenta
+
+REFERENCE
+foreground: 80b58900 # yellow, reduced alpha
+
+CODE
+foreground: 859900 # green
+
+EMPH
+foreground: cb4b16 # orange
+font-style: italic
+
+STRONG
+foreground: dc322f # red
+font-weight: bold
+
+HTML_ENTITY
+foreground: 6c71c4 # violet
+
+COMMENT
+foreground: 93a1a1 # base1
+
+VERBATIM
+foreground: 859900 # green
+
+BLOCKQUOTE
+foreground: d33682 # magenta
+
+METADATA
+foreground: 222222
+background: e8e8e8
+
+METAKEY
+foreground: 777777
+
+CITATION
+foreground: dc322f
+
+MATHSPAN
+foreground: dc322f
+
+TABLE
+foreground: 777777
+background: e8e8e8
+
+DEFTERM
+foreground: dc322f
+
+DEFINITION
+foreground: dc322f
