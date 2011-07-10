@@ -20,6 +20,7 @@
 		5A9E652113C902DE00C8D820 /* fletcher.style in Resources */ = {isa = PBXBuildFile; fileRef = 5A9E652013C902DE00C8D820 /* fletcher.style */; };
 		5AA14DEE13C27654002D188D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA14DED13C27654002D188D /* WebKit.framework */; };
 		5AA34A2113C9EAC00030158C /* fletcher-solarized.style in Resources */ = {isa = PBXBuildFile; fileRef = 5AA34A2013C9EAC00030158C /* fletcher-solarized.style */; };
+		5AD5AFA313CA4D60003F6247 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AD5AFA213CA4D60003F6247 /* AppDelegate.m */; };
 		5AF8DE6513C8AA23001B412C /* FTPMultiMarkdownHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AF8DE6413C8AA23001B412C /* FTPMultiMarkdownHighlighter.m */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -57,6 +58,8 @@
 		5A9E652013C902DE00C8D820 /* fletcher.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fletcher.style; path = "../../../Active/MMD-Editor/styleparser/styles/fletcher.style"; sourceTree = SOURCE_ROOT; };
 		5AA14DED13C27654002D188D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		5AA34A2013C9EAC00030158C /* fletcher-solarized.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "fletcher-solarized.style"; path = "../../../Active/MMD-Editor/styleparser/styles/fletcher-solarized.style"; sourceTree = SOURCE_ROOT; };
+		5AD5AFA113CA4D60003F6247 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5AD5AFA213CA4D60003F6247 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5AF8DE6313C8AA23001B412C /* FTPMultiMarkdownHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FTPMultiMarkdownHighlighter.h; path = "../../../Active/MMD-Editor/mmd-editor/FTPMultiMarkdownHighlighter.h"; sourceTree = SOURCE_ROOT; };
 		5AF8DE6413C8AA23001B412C /* FTPMultiMarkdownHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FTPMultiMarkdownHighlighter.m; path = "../../../Active/MMD-Editor/mmd-editor/FTPMultiMarkdownHighlighter.m"; sourceTree = SOURCE_ROOT; };
 		8D15AC360486D014006FF6A4 /* mmd_editor-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mmd_editor-Info.plist"; sourceTree = "<group>"; };
@@ -117,6 +120,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				5AD5AFA113CA4D60003F6247 /* AppDelegate.h */,
+				5AD5AFA213CA4D60003F6247 /* AppDelegate.m */,
 				5AF8DE6313C8AA23001B412C /* FTPMultiMarkdownHighlighter.h */,
 				5AF8DE6413C8AA23001B412C /* FTPMultiMarkdownHighlighter.m */,
 				5A47A19B13BBF658008DE4CC /* HGMarkdownHighlighter.h */,
@@ -125,9 +130,6 @@
 				5A47A19E13BBF658008DE4CC /* HGMarkdownHighlightingStyle.m */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
-				5A69085E13C8EAA200995340 /* styleparser.c */,
-				5A69085F13C8EAA200995340 /* styleparser.h */,
-				5A69086013C8EAA200995340 /* styles */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -135,6 +137,9 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				5A69086013C8EAA200995340 /* styles */,
+				5A69085E13C8EAA200995340 /* styleparser.c */,
+				5A69085F13C8EAA200995340 /* styleparser.h */,
 				5A47A1AB13BBF6A7008DE4CC /* markdown_definitions.h */,
 				5A47A1AC13BBF6A7008DE4CC /* markdown_parser.h */,
 				5A47A1A213BBF675008DE4CC /* markdown_parser.c */,
@@ -257,6 +262,7 @@
 				5A47A1A413BBF675008DE4CC /* markdown_parser.c in Sources */,
 				5AF8DE6513C8AA23001B412C /* FTPMultiMarkdownHighlighter.m in Sources */,
 				5A69086513C8EAA200995340 /* styleparser.c in Sources */,
+				5AD5AFA313CA4D60003F6247 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
