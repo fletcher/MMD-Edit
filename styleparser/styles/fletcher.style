@@ -4,7 +4,7 @@
 editor
 foreground: 000000 # black
 background: ffffff # white
-caret: ffffff
+caret: 000000
 
 H1
 foreground: 222222 
@@ -55,16 +55,17 @@ AUTO_LINK_EMAIL
 foreground: 2aa198 # cyan
 
 IMAGE
-foreground: d33682 # magenta
+foreground: 268bd2 # blue
 
 REFERENCE
 foreground: 80b58900 # yellow, reduced alpha
 
 CODE
-foreground: 859900 # green
+foreground: 2aa198 # cyan
+background: E8E8E8
 
 EMPH
-foreground: cb4b16 # orange
+foreground: 268bd2 # blue
 font-style: italic
 
 STRONG
@@ -78,14 +79,15 @@ COMMENT
 foreground: 93a1a1 # base1
 
 VERBATIM
-foreground: 859900 # green
+foreground: 2aa198 # cyan
+background: E8E8E8
 
 BLOCKQUOTE
-foreground: d33682 # magenta
+foreground: dc322f # red
 
 METADATA
 foreground: 222222
-background: e8e8e8
+background: E8E8E8
 
 METAKEY
 foreground: 777777
@@ -94,14 +96,13 @@ CITATION
 foreground: dc322f
 
 MATHSPAN
-foreground: dc322f
+foreground: 2aa198 # cyan
 
 TABLE
-foreground: 777777
-background: e8e8e8
+background: E8E8E8
 
 DEFTERM
-foreground: dc322f
+background: E8E8E8
 
 DEFINITION
-foreground: dc322f
+foreground: 93a1a1 # base1

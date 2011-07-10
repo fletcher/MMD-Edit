@@ -30,6 +30,14 @@
     return self;
 }
 
++ (void)initialize
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *appDefaults = [NSDictionary
+								 dictionaryWithObject:@"fletcher" forKey:@"defaultStyleSheet"];
+    [defaults registerDefaults:appDefaults];
+}
+
 - (NSString *)windowNibName
 {
     // Override returning the nib file name of the document
@@ -77,8 +85,8 @@
 		hl.waitInterval = 0.3;
 		hl.makeLinksClickable = YES;
 		
-
-		NSString *styleName = @"fletcher";
+		NSString *styleName = [[NSUserDefaults standardUserDefaults] stringForKey:@"defaultStyleSheet"];
+		
 		NSString *styleFilePath = [[NSBundle mainBundle] pathForResource:styleName
 																  ofType:@"style"];
 		NSString *styleContents = [NSString stringWithContentsOfFile:styleFilePath
