@@ -267,9 +267,8 @@
 //	[textView setTypingAttributes:typingAttributes];
 	
 	/** ADDED CODE BELOW **/
-	[textView shouldChangeTextInRange:metaDataRange replacementString:nil];
+//	[textView shouldChangeTextInRange:metaDataRange replacementString:nil];
 	[[textView textStorage] setAttributes:typingAttributes range:metaDataRange];
-	[textView didChangeText];
 	
 	[paraStyle release];
 	[typingAttributes release];
@@ -364,7 +363,6 @@
 		[paraStyle release];
 	}
 	
-	[textView didChangeText];
 }
 
 
