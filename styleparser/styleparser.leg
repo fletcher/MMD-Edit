@@ -249,6 +249,21 @@ char **get_element_type_names()
         elem_type_names[HRULE] = "HRULE";
         elem_type_names[REFERENCE] = "REFERENCE";
         elem_type_names[NOTE] = "NOTE";
+
+		elem_type_names[METADATA] = "METADATA";
+		elem_type_names[METAKEY] = "METAKEY";
+		elem_type_names[METAVALUE] = "METAVALUE";
+		elem_type_names[CITATION] = "CITATION";
+		elem_type_names[FOOTNOTE] = "FOOTNOTE";
+		elem_type_names[MATHSPAN] = "MATHSPAN";
+		elem_type_names[TABLE] = "TABLE";
+		elem_type_names[TABLEROW] = "TABLEROW";
+		elem_type_names[TABLESEPARATOR] = "TABLESEPARATOR";
+		elem_type_names[SEPARATORCELL] = "SEPARATORCELL";
+		elem_type_names[CELLCONTENTS] = "CELLCONTENTS";
+		elem_type_names[DEFTERM] = "DEFTERM";
+		elem_type_names[DEFINITION] = "DEFINITION";
+
     }
     return elem_type_names;
 }

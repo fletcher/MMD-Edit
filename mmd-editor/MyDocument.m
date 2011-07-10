@@ -79,7 +79,7 @@
 		
 		[hl activate];
 
-		NSString *styleName = @"error";
+		NSString *styleName = @"fletcher";
 		NSString *styleFilePath = [[NSBundle mainBundle] pathForResource:styleName
 																  ofType:@"style"];
 		NSString *styleContents = [NSString stringWithContentsOfFile:styleFilePath
@@ -87,10 +87,10 @@
 															   error:NULL];
 
 		
-/*		[hl applyStylesFromStylesheet:styleContents
+		[hl applyStylesFromStylesheet:styleContents
 					 withErrorDelegate:self
 						 errorSelector:@selector(handleStyleParsingErrors:)];		
-*/		
+		
 		self.isMMD = YES;
 		
 	}
