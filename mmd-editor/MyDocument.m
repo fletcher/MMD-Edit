@@ -33,13 +33,16 @@
 + (void)initialize
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
+	NSMutableDictionary *appDefaults = [[NSMutableDictionary alloc] init];
+	
 	// Set default styleSheet
-	[defaults setValue:@"fletcher" forKey:@"defaultStyleSheet"];
+	[appDefaults setValue:@"fletcher" forKey:@"defaultStyleSheet"];
 	
 	// Use MultiMarkdown by default
-	[defaults setBool:YES
+	[appDefaults setBool:YES
 			   forKey:@"useMultiMarkdown"];
+	
+	[defaults registerDefaults:appDefaults];
 }
 
 - (NSString *)windowNibName
@@ -96,10 +99,34 @@
 		
 		hl.formatParagraphs = YES;
 		
+		
+		// Load Style Sheet
 		NSString *styleName = [[NSUserDefaults standardUserDefaults] stringForKey:@"defaultStyleSheet"];
 		
+		// last resort will be checking inside the app bundle
 		NSString *styleFilePath = [[NSBundle mainBundle] pathForResource:styleName
 																  ofType:@"style"];
+		
+		// Check Application Support first
+		NSArray *appSupportPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSAllDomainsMask, YES);
+		
+		NSEnumerator *enumerator = [appSupportPaths objectEnumerator];
+		id aPath;
+		
+		while (aPath = [enumerator nextObject])
+		{
+			NSString *filePath = [[[aPath stringByAppendingPathComponent:@"MMD-Edit/Styles/"]
+								  stringByAppendingPathComponent:styleName]
+								  stringByAppendingPathExtension:@"style"];
+			if ([[NSFileManager defaultManager]
+				 fileExistsAtPath:filePath] == YES ) {
+				styleFilePath = filePath;
+			}
+		}
+		
+				 
+
+		// And load the file contents (assuming it exists...)
 		NSString *styleContents = [NSString stringWithContentsOfFile:styleFilePath
 															encoding:NSUTF8StringEncoding
 															   error:NULL];
