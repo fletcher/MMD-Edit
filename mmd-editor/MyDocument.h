@@ -31,10 +31,7 @@
 - (IBAction)previewHTMLAction:(id)sender;
 
 - (IBAction)tidyRulers:(id)sender;
-- (IBAction)resetParagraphs:(id)sender;
-- (IBAction)formatMetaData:(id)sender;
-- (IBAction)formatTables:(id)sender;
-- (IBAction)formatBlockQuotes: (id)sender;
+
 
 - (void) handleStyleParsingErrors:(NSArray *)errorMessages;
 

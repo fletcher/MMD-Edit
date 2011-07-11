@@ -19,5 +19,16 @@
 
 }
 
+- (void)resetParagraphs;
+- (void)resetParagraphsWithRange:(NSRange) range;
+
+- (void)formatMetaData;
+- (void)formatMetaDataWithRange:(NSRange)range;
+
+- (void)formatTables;
+- (void)formatTablesWithRange:(NSRange)range;
+
+- (void)formatBlockQuotes;
+- (void)formatBlockQuotesWithRange:(NSRange)range;
 
 @end
