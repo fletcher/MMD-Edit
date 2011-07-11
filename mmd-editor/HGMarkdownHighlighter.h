@@ -24,6 +24,7 @@
 	BOOL resetTypingAttributes;
 	BOOL makeLinksClickable;
 	NSArray *styles;
+	BOOL highlightingIsDirty;
 
 @private
 	NSFontTraitMask clearFontTraitMask;
@@ -36,7 +37,6 @@
 	BOOL workerThreadResultsInvalid;
 	BOOL styleDependenciesPending;
 	NSMutableArray *styleParsingErrors;
-	BOOL highlightingIsDirty;
 }
 
 /** \brief The order and styles for higlighting different elements.
@@ -99,6 +99,7 @@
  */
 @property int extensions;
 
+@property BOOL highlightingIsDirty;
 
 /** \brief Init new instance while setting targetTextView. */
 - (id) initWithTextView:(NSTextView *)textView;

@@ -47,6 +47,7 @@ void styleparsing_error_callback(char *error_message, void *context_data)
 @synthesize defaultTypingAttributes;
 @synthesize resetTypingAttributes;
 @synthesize makeLinksClickable;
+@synthesize highlightingIsDirty;
 
 
 - (id) init
