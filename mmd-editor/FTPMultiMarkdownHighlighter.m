@@ -26,8 +26,16 @@
 - (void) textViewTextDidChange:(NSNotification *)notification
 {
 	[super textViewTextDidChange:notification];
-//	[self resetParagraphs];
-//	[self formatTables];
+
+	NSRect visibleRect = [[[self.targetTextView enclosingScrollView] contentView] documentVisibleRect];
+	NSRange visibleRange = [[self.targetTextView layoutManager] glyphRangeForBoundingRect:visibleRect inTextContainer:[self.targetTextView textContainer]];
+
+//	[self resetParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
+	[self resetParagraphsWithRange:visibleRange];
+	
+	[self formatMetaDataWithRange:visibleRange];
+	[self formatTablesWithRange:visibleRange];
+	[self formatBlockQuotesWithRange:visibleRange];
 }
 
 
@@ -59,14 +67,23 @@
 	
 	NSArray *metaDataRanges = [self rangesForElementType:METADATA];
 	
+	// End if no metadata
 	if ([metaDataRanges count] == 0)
 	{
 		return;
 	}
 	
+	
 	NSString *metaDataRangeString = [metaDataRanges objectAtIndex:0];
 	NSRange metaDataRange = NSRangeFromString(metaDataRangeString);
 	
+	// End if metadata not in specified range
+	NSRange intersection = NSIntersectionRange(range, metaDataRange);
+	if (intersection.length == 0) {
+		return;
+	}
+	
+
 	//	NSLog(@"Found range %@",metaDataRangeString);
 	//	[hl clearHighlightingForRange:metaDataRange];
 	
@@ -126,15 +143,23 @@
 	// find range for Tables and do something
 	NSArray *tableRanges = [self rangesForElementType:TABLE];
 	
+	// No tables present
 	if ([tableRanges count] == 0)
 		return;
 	
 	NSEnumerator *enumerator = [tableRanges objectEnumerator];
 	id aTableRangeString;
+	NSRange intersection;
 	
 	while (aTableRangeString = [enumerator nextObject]) {
 		// Iterate through each table
 		NSRange tableRange = NSRangeFromString(aTableRangeString);
+		
+		// skip if table not in specified range
+		intersection = NSIntersectionRange(tableRange, range);
+		if (intersection.length == 0)
+			continue;
+		
 		int cols;
 		
 		
@@ -229,8 +254,15 @@
 	NSEnumerator *enumerator = [quoteRanges objectEnumerator];
 	id aQuoteRangeString;
 	
+	NSRange intersection;
+	
 	while (aQuoteRangeString = [enumerator nextObject]) {
 		NSRange quoteRange = NSRangeFromString(aQuoteRangeString);
+		
+		// skip if not in specified range
+		intersection = NSIntersectionRange(range, quoteRange);
+		if (intersection.length == 0)
+			continue;
 		
 		NSMutableParagraphStyle *paraStyle = [[self.targetTextView defaultParagraphStyle] mutableCopy];
 		
