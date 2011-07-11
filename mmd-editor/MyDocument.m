@@ -88,6 +88,13 @@
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
 		hl.makeLinksClickable = YES;
+
+		
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useMultiMarkdown"]) {
+			hl.extensions = hl.extensions | EXT_MMD;
+		}
+		
+		hl.formatParagraphs = YES;
 		
 		NSString *styleName = [[NSUserDefaults standardUserDefaults] stringForKey:@"defaultStyleSheet"];
 		

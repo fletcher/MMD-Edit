@@ -15,11 +15,13 @@
 
 @interface FTPMultiMarkdownHighlighter : HGMarkdownHighlighter {
 
+	BOOL formatParagraphs;
+	
 @private
 
 }
 
-- (void) reformatParagraphsWithRange:(NSRange) range;
+- (void)reformatParagraphsWithRange:(NSRange) range;
 
 - (void)resetParagraphs;
 - (void)resetParagraphsWithRange:(NSRange) range;
@@ -32,5 +34,7 @@
 
 - (void)formatBlockQuotes;
 - (void)formatBlockQuotesWithRange:(NSRange)range;
+
+@property BOOL formatParagraphs;
 
 @end

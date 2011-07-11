@@ -10,15 +10,14 @@
 
 @implementation FTPMultiMarkdownHighlighter
 
+@synthesize formatParagraphs;
+
 - (id) init
 {
 	if (!(self = [super init]))
 		return nil;
 	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useMultiMarkdown"]) {
-		self.extensions = self.extensions | EXT_MMD;
-	}
-
+	self.formatParagraphs = NO;
 	return self;
 }
 
@@ -28,7 +27,8 @@
 	[super textViewTextDidChange:notification];
 
 	// Update paragraph layout for current paragraph
-	[self reformatParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
+	if (self.formatParagraphs)
+		[self reformatParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
 }
 
 - (void) reformatParagraphsWithRange:(NSRange) range
@@ -47,7 +47,8 @@
 
 - (void) applyHighlighting:(element **)elements withRange:(NSRange)range
 {
-	[self reformatParagraphsWithRange:range];
+	if (self.formatParagraphs)
+		[self reformatParagraphsWithRange:range];
 	[super applyHighlighting:elements withRange:range];
 }
 
