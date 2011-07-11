@@ -27,18 +27,15 @@
 {
 	[super textViewTextDidChange:notification];
 
-	NSRect visibleRect = [[[self.targetTextView enclosingScrollView] contentView] documentVisibleRect];
-	NSRange visibleRange = [[self.targetTextView layoutManager] glyphRangeForBoundingRect:visibleRect inTextContainer:[self.targetTextView textContainer]];
-	[self reformatParagraphsWithRange:visibleRange];
+	// Update paragraph layout for current paragraph
+	[self reformatParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
 }
 
 - (void) reformatParagraphsWithRange:(NSRange) range
 {
 	[[self.targetTextView textStorage] beginEditing];
 
-	//[self resetParagraphsWithRange:range];
-	[self resetParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
-	
+	[self resetParagraphsWithRange:range];	
 	[self formatMetaDataWithRange:range];
 	[self formatTablesWithRange:range];
 	[self formatBlockQuotesWithRange:range];
