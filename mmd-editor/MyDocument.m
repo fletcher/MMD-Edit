@@ -208,12 +208,22 @@
 
 - (IBAction)tidyRulers:(id)sender
 {
+	[self resetParagraphs:nil];
 	[self formatMetaData:nil];
 	[self formatTables:nil];
+	[self formatBlockQuotes:nil];
+}
+
+- (IBAction)resetParagraphs:(id)sender
+{
+	NSParagraphStyle *paraStyle = [textView defaultParagraphStyle];
 	
-	//[self formatBlockQuotes:nil]
+	[[textView textStorage] addAttribute:NSParagraphStyleAttributeName
+								   value:paraStyle
+								   range:NSMakeRange(0, [[textView string] length])];
 	
 }
+
 
 - (IBAction)formatMetaData:(id)sender
 {
@@ -367,6 +377,36 @@
 		[paraStyle release];
 	}
 	
+}
+
+- (IBAction)formatBlockQuotes: (id)sender
+{
+	NSArray *quoteRanges = [hl rangesForElementType:BLOCKQUOTE];
+	
+	if ([quoteRanges count] == 0)
+		return;
+	
+	NSEnumerator *enumerator = [quoteRanges objectEnumerator];
+	id aQuoteRangeString;
+	
+	while (aQuoteRangeString = [enumerator nextObject]) {
+		NSRange quoteRange = NSRangeFromString(aQuoteRangeString);
+		
+		NSMutableParagraphStyle *paraStyle = [[textView defaultParagraphStyle] mutableCopy];
+		
+		// Get avg character width
+		NSFont *myFont = [[textView textStorage] font];
+		float charWidth = [[myFont screenFontWithRenderingMode:NSFontDefaultRenderingMode] advancementForGlyph:(NSGlyph) 'T'].width;
+		
+		[paraStyle setHeadIndent:charWidth*8];
+		[paraStyle setFirstLineHeadIndent:charWidth*8];
+		[paraStyle setTailIndent:-charWidth*8];
+		
+		[[textView textStorage] addAttribute:NSParagraphStyleAttributeName
+									   value:paraStyle
+									   range:quoteRange];
+		[paraStyle release];
+	}
 }
 
 
