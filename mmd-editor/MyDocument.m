@@ -39,7 +39,7 @@
 	[appDefaults setValue:@"default" forKey:@"defaultStyleSheet"];
 	
 	// Use MultiMarkdown by default
-	[appDefaults setValue:(BOOL)YES
+	[appDefaults setValue:[NSNumber numberWithBool:YES]
 			   forKey:@"useMultiMarkdown"];
 	
 	[defaults registerDefaults:appDefaults];
@@ -137,7 +137,9 @@
 						 errorSelector:@selector(handleStyleParsingErrors:)];		
 		[hl activate];
 		
-		self.isMMD = YES;
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useMultiMarkdown"]) {
+			self.isMMD = YES;
+		}
 		
 	}
 }
@@ -226,15 +228,15 @@
 	// Toggle between MMD and plain Markdown syntax-highlighting
     if (isMMD != newMMD) {
 		isMMD = newMMD;
-		
 		if (isMMD) {
 			hl.extensions = hl.extensions | EXT_MMD;
 		} else {
 			hl.extensions = hl.extensions & ~EXT_MMD;
 		}
 		
-		[hl clearHighlighting];
-		[hl readClearTextStylesFromTextView];
+		hl.highlightingIsDirty = YES;
+
+		[hl parseAndHighlightNow];
     }
 		
 	
