@@ -34,13 +34,17 @@
 
 - (void) reformatParagraphsWithRange:(NSRange) range
 {
-	//	[self resetParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
-	[self resetParagraphsWithRange:range];
+	[[self.targetTextView textStorage] beginEditing];
+
+	//[self resetParagraphsWithRange:range];
+	[self resetParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
 	
 	[self formatMetaDataWithRange:range];
 	[self formatTablesWithRange:range];
 	[self formatBlockQuotesWithRange:range];
 	
+	[[self.targetTextView textStorage] endEditing];
+
 }
 
 
