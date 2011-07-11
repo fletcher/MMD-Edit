@@ -29,13 +29,25 @@
 
 	NSRect visibleRect = [[[self.targetTextView enclosingScrollView] contentView] documentVisibleRect];
 	NSRange visibleRange = [[self.targetTextView layoutManager] glyphRangeForBoundingRect:visibleRect inTextContainer:[self.targetTextView textContainer]];
+	[self reformatParagraphsWithRange:visibleRange];
+}
 
-//	[self resetParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
-	[self resetParagraphsWithRange:visibleRange];
+- (void) reformatParagraphsWithRange:(NSRange) range
+{
+	//	[self resetParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
+	[self resetParagraphsWithRange:range];
 	
-	[self formatMetaDataWithRange:visibleRange];
-	[self formatTablesWithRange:visibleRange];
-	[self formatBlockQuotesWithRange:visibleRange];
+	[self formatMetaDataWithRange:range];
+	[self formatTablesWithRange:range];
+	[self formatBlockQuotesWithRange:range];
+	
+}
+
+
+- (void) applyHighlighting:(element **)elements withRange:(NSRange)range
+{
+	[self reformatParagraphsWithRange:range];
+	[super applyHighlighting:elements withRange:range];
 }
 
 
@@ -114,7 +126,7 @@
 	//	[paraStyle setDefaultTabInterval:(charWidth * (maxWidth +4))];
 	[paraStyle setTabStops:[NSArray array]];
 	
-	[paraStyle addTabStop:[[[NSTextTab alloc] initWithType:NSLeftTabStopType location:(charWidth * (maxWidth +3))] autorelease]];
+	[paraStyle addTabStop:[[[NSTextTab alloc] initWithType:NSLeftTabStopType location:(charWidth * (maxWidth +2))] autorelease]];
 	
 	
 	//	[textView setDefaultParagraphStyle:paragraphStyle];

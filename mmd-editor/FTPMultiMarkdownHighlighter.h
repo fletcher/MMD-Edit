@@ -19,6 +19,8 @@
 
 }
 
+- (void) reformatParagraphsWithRange:(NSRange) range;
+
 - (void)resetParagraphs;
 - (void)resetParagraphsWithRange:(NSRange) range;
 
