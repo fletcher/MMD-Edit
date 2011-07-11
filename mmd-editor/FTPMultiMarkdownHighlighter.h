@@ -35,6 +35,10 @@
 - (void)formatBlockQuotes;
 - (void)formatBlockQuotesWithRange:(NSRange)range;
 
+- (void)updateWhitespaceWithRange:(NSRange) range;
+- (void)updateMetadataWhitespaceWithRange:(NSRange)range;
+
+
 @property BOOL formatParagraphs;
 
 @end

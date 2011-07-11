@@ -26,6 +26,9 @@
 {
 	[super textViewTextDidChange:notification];
 
+	// Do we need to clean up whitespace on the current paragraph?
+	[self updateWhitespaceWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
+	
 	// Update paragraph layout for current paragraph
 	if (self.formatParagraphs)
 		[self reformatParagraphsWithRange:[self.targetTextView rangeForUserParagraphAttributeChange]];
@@ -83,19 +86,16 @@
 	
 	// End if no metadata
 	if ([metaDataRanges count] == 0)
-	{
 		return;
-	}
 	
-	
-	NSString *metaDataRangeString = [metaDataRanges objectAtIndex:0];
-	NSRange metaDataRange = NSRangeFromString(metaDataRangeString);
 	
 	// End if metadata not in specified range
+	NSString *metaDataRangeString = [metaDataRanges objectAtIndex:0];
+	NSRange metaDataRange = NSRangeFromString(metaDataRangeString);
+
 	NSRange intersection = NSIntersectionRange(range, metaDataRange);
-	if (intersection.length == 0) {
+	if (intersection.length == 0)
 		return;
-	}
 	
 
 	//	NSLog(@"Found range %@",metaDataRangeString);
@@ -295,5 +295,72 @@
 	}
 }
 
+
+- (void) updateWhitespaceWithRange:(NSRange)range
+{
+	[self updateMetadataWhitespaceWithRange:range];
+	
+}
+
+- (void) updateMetadataWhitespaceWithRange:(NSRange)range
+{
+	NSArray *metaDataRanges = [self rangesForElementType:METADATA];
+	
+	// End if no metadata
+	if ([metaDataRanges count] == 0)
+		return;
+	
+	
+	// End if metadata not in specified range
+	NSString *metaDataRangeString = [metaDataRanges objectAtIndex:0];
+	NSRange metaDataRange = NSRangeFromString(metaDataRangeString);
+
+	NSRange intersection = NSIntersectionRange(range, metaDataRange);
+	if (intersection.length == 0)
+		return;
+	
+	
+	// So, we're in metadata, and now just need to tweak white space
+	NSArray *metaKeysRanges = [self rangesForElementType:METAKEY];
+	id aKeyRange;
+	NSRange metaKeyRange;
+	NSEnumerator *enumerator = [metaKeysRanges objectEnumerator];
+	
+	// Set up scanner
+	NSCharacterSet *spaceSet = [NSCharacterSet characterSetWithCharactersInString:@" \t"];
+	NSScanner *metaScanner = [NSScanner scannerWithString:[[self.targetTextView textStorage] string]];
+		
+	while (aKeyRange = [enumerator nextObject])
+	{
+		metaKeyRange = NSRangeFromString(aKeyRange);
+		if (NSIntersectionRange(metaKeyRange, range).length == 0)
+		{
+			continue;
+		} else {
+			// We found the right line
+			int startValue = metaKeyRange.location+metaKeyRange.length;
+
+			// find the ':'
+			[metaScanner setScanLocation:startValue];
+			[metaScanner scanUpToString:@":" intoString:NULL];
+			startValue = [metaScanner scanLocation]+1;
+			
+			// now we need to worry about whitespace
+			[metaScanner setCharactersToBeSkipped:nil];
+			[metaScanner setScanLocation:startValue];
+			
+			// Go until we find non whitespace character
+			[metaScanner scanCharactersFromSet:spaceSet intoString:NULL];
+			
+			// replace whitespace after ':' with a single tab character
+			[[self.targetTextView textStorage]
+			 replaceCharactersInRange:NSMakeRange(startValue, [metaScanner scanLocation]-startValue)
+			 withString:@"\t"];
+			
+			break;
+		}
+	}
+	
+}
 
 @end
