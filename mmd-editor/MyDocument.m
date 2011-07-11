@@ -36,10 +36,10 @@
 	NSMutableDictionary *appDefaults = [[NSMutableDictionary alloc] init];
 	
 	// Set default styleSheet
-	[appDefaults setValue:@"fletcher" forKey:@"defaultStyleSheet"];
+	[appDefaults setValue:@"default" forKey:@"defaultStyleSheet"];
 	
 	// Use MultiMarkdown by default
-	[appDefaults setBool:YES
+	[appDefaults setValue:(BOOL)YES
 			   forKey:@"useMultiMarkdown"];
 	
 	[defaults registerDefaults:appDefaults];
