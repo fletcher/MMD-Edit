@@ -22,6 +22,15 @@
 	return self;
 }
 
+
+- (void) textViewTextDidChange:(NSNotification *)notification
+{
+	[super textViewTextDidChange:notification];
+//	[self resetParagraphs];
+//	[self formatTables];
+}
+
+
 - (void)resetParagraphs
 {
 	[self resetParagraphsWithRange:NSMakeRange(0, [[self.targetTextView string] length])];
