@@ -559,33 +559,34 @@
 		paraRange = NSRangeFromString(aParaRange);
 		intersection = NSIntersectionRange(paraRange, range);
 		
-		// Skip if we're not in this table
+		// Skip if we're not in this paragraph
 		if (intersection.length == 0)
 			continue;
+				
+		// get substring for paragraph
+		NSMutableString *paragraphString = [NSMutableString stringWithString:[[[self.targetTextView textStorage] string]
+											substringWithRange:paraRange]];
 		
-		NSRange newLineRange;
-		int start = paraRange.location;
-		int end;
+		NSLog(@"Checking: %@",paragraphString);
+		// remove newlines
+		[paragraphString replaceOccurrencesOfString:@"\n" 
+										 withString:@" "
+											options:NSCaseInsensitiveSearch 
+											  range:NSMakeRange(0, [paragraphString length])];
 		
-		// iterate over newlines and replace with
-		newLineRange = [[[self.targetTextView textStorage] string] rangeOfString:@"\n"
-																		options:NSBackwardsSearch 
-																		range:paraRange];
-		[[self.targetTextView textStorage] beginEditing];
-		while (newLineRange.length != 0) {
-			// don't change linebreaks
-			if (![[[[self.targetTextView textStorage] string] 
-				  substringWithRange:NSMakeRange(newLineRange.location-2, 2)] isEqualToString:@"  "])
-			{
-				[[self.targetTextView textStorage] replaceCharactersInRange:newLineRange withString:@" "];
-			}
-			
-			end = newLineRange.location-start;
-			newLineRange = [[[self.targetTextView textStorage] string] rangeOfString:@"\n"
-																			 options:NSBackwardsSearch 
-																			   range:NSMakeRange(start, end)];
-			
-		}
+		// replace repeated spaces with single
+		id parts = [NSMutableArray arrayWithArray:[paragraphString componentsSeparatedByString:@" "]];
+		
+		[parts removeObject:@""];
+		
+		// TODO: Fix this - it's a crutch to work around the fact that blockquotes and PARA don't work together
+		// properly in Ali's parser and I haven't fixed it yet.
+		[parts addObject:@""];
+		
+		NSString *newParagraph = [parts componentsJoinedByString:@" "];
+
+		[[self.targetTextView textStorage] replaceCharactersInRange:paraRange withString:newParagraph];
+		
 		[[self.targetTextView textStorage] endEditing];
 
 	}
