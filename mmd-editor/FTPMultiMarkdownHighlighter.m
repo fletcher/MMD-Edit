@@ -386,14 +386,12 @@
 		if (intersection.length == 0)
 			continue;
 		
-		NSLog(@"we're in a table");
 		NSRange lineRange = [self.targetTextView rangeForUserParagraphAttributeChange];
+
 		// Don't mess with newline
 		int start = lineRange.location;
 		int len = lineRange.length-1;
-		NSLog(@"checking line %d:%d",start,len);
 
-		NSLog(@"line:%@",[[[self.targetTextView textStorage] string] substringWithRange:NSMakeRange(start, len)]);
 		NSRange dividerRange = [[[self.targetTextView textStorage] string] rangeOfString:@"|"
 																		 options:NSBackwardsSearch 
 																				   range:NSMakeRange(start, len)];
@@ -405,67 +403,33 @@
 		while (dividerRange.length != 0)
 		{
 			// found '|'
-			NSLog(@"found '|' at %d:%d",dividerRange.location,dividerRange.length);
 			
 			// '|' should be followed by '|', or whitespace
-			if ([trailingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
-													 characterAtIndex:dividerRange.location+dividerRange.length]]) {
-				NSLog(@"trailing is OK");
-			} else {
+			if (![trailingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
+													 characterAtIndex:dividerRange.location+dividerRange.length]])
 				[[self.targetTextView textStorage] replaceCharactersInRange:
 				  NSMakeRange(dividerRange.location+dividerRange.length, 0) withString:@" "];
-			}
 			
 			// '|' should be preceded by '|' or tab
-			if ([leadingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
-													 characterAtIndex:dividerRange.location-1]]) {
-				NSLog(@"leading is OK");
-			} else {
+			if (![leadingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
+													 characterAtIndex:dividerRange.location-1]])
 				[[self.targetTextView textStorage] replaceCharactersInRange:
 				 NSMakeRange(dividerRange.location, 0) withString:@"\t"];
-			}
 
 			
 			len = dividerRange.location-start;
 			if (len < 0) {
 				break;
 			}
-			NSLog(@"moving to %d:%d",start,len);
+			
+			// Find next '|'
 			dividerRange = [[[self.targetTextView textStorage] string] rangeOfString:@"|"
 																					 options:NSBackwardsSearch 
 																					   range:NSMakeRange(start, len)];			
 		}
 		
+		// Finished current line, so we're done
 		break;
-		
-		// TODO: Need to split into the line before cursor
-		//	and the line after cursor - otherwise insertion point booted to end of line
-		
-	/*	NSRange lastRange = NSIntersectionRange(lineRange, 
-												NSMakeRange([self.targetTextView rangeForUserCompletion].location+1,
-												[[self.targetTextView textStorage] length]));
-		
-		NSString *lineEnding = [[[self.targetTextView textStorage] string]
-								substringWithRange:lastRange];
-		
-		[[self.targetTextView textStorage]
-		 replaceCharactersInRange:lastRange
-		 withString:[self reformatTableString:lineEnding formatEnd:NO]];
-
-		
-		NSRange firstRange = NSIntersectionRange(lineRange,
-												 NSMakeRange(0,[self.targetTextView rangeForUserCompletion].location-1));
-		
-		NSString *lineBeginning = [[[self.targetTextView textStorage] string]
-								substringWithRange:firstRange];
-
-		[[self.targetTextView textStorage]
-		 replaceCharactersInRange:firstRange
-		 withString:[self reformatTableString:lineBeginning formatEnd:YES]];
-		
-		
-		break;*/
-		
 	}
 }
 
