@@ -190,7 +190,14 @@
 //	NSLog(@"launching %@", [path2MMD stringByExpandingTildeInPath]);
 	NSTask* task = [[NSTask alloc] init];
 	[task setLaunchPath: [path2MMD stringByExpandingTildeInPath]];
-	[task setArguments: [NSArray arrayWithObjects: nil]];
+	
+	// MMD or MD?
+	if (self.isMMD) {
+		[task setArguments: [NSArray arrayWithObjects: nil]];
+	} else {
+		[task setArguments: [NSArray arrayWithObjects: @"-c", nil]];
+	}
+
 	
 	NSPipe *writePipe = [NSPipe pipe];
 	NSFileHandle *writeHandle = [writePipe fileHandleForWriting];
