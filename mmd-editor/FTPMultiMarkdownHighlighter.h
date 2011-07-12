@@ -40,7 +40,9 @@
 - (void)updateTableWhitespaceWithRange:(NSRange)range;
 - (void) updateFutureTableWithRange:(NSRange)range;
 
--(void)updateTableRowSpacingWithRange:(NSRange)lineRange;
+- (void)updateTableRowSpacingWithRange:(NSRange)lineRange;
+
+- (void)unWrapParagraphsWithRange:(NSRange)range;
 
 @property BOOL formatParagraphs;
 

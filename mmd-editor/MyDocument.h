@@ -31,6 +31,7 @@
 - (IBAction)previewHTMLAction:(id)sender;
 
 - (IBAction)tidyRulers:(id)sender;
+- (IBAction)unWrapParagraphs:(id)sender;
 
 
 - (void) handleStyleParsingErrors:(NSArray *)errorMessages;

@@ -55,7 +55,9 @@ Block =     BlankLine*
             | Para
             | Plain )
 
-Para =      NonindentSpace Inlines BlankLine+
+Para =      < s:LocMarker NonindentSpace Inlines > BlankLine+
+	{ ADD(elem_s(PARA)); }
+
 
 Plain =     Inlines
 

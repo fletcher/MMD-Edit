@@ -267,6 +267,7 @@ char **get_element_type_names()
 		elem_type_names[CELLCONTENTS] = "CELLCONTENTS";
 		elem_type_names[DEFTERM] = "DEFTERM";
 		elem_type_names[DEFINITION] = "DEFINITION";
+		elem_type_names[PARA] = "PARA";
 
     }
     return elem_type_names;

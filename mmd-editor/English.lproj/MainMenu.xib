@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="81"/>
+			<integer value="375"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -729,6 +729,15 @@
 							<string key="NSTitle">Format</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="823753587">
+									<reference key="NSMenu" ref="892078337"/>
+									<string key="NSTitle">Unwrap Paragraph(s)</string>
+									<string key="NSKeyEquiv">u</string>
+									<int key="NSKeyEquivModMask">1310720</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="417081885">
 									<reference key="NSMenu" ref="892078337"/>
 									<string key="NSTitle">Font</string>
@@ -2240,6 +2249,14 @@
 					</object>
 					<int key="connectionID">583</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">unWrapParagraphs:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="823753587"/>
+					</object>
+					<int key="connectionID">585</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2800,6 +2817,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="417081885"/>
 							<reference ref="236885983"/>
+							<reference ref="823753587"/>
 						</object>
 						<reference key="parent" ref="470804886"/>
 					</object>
@@ -3373,6 +3391,11 @@
 						<reference key="object" ref="758864049"/>
 						<reference key="parent" ref="720053764"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">584</int>
+						<reference key="object" ref="823753587"/>
+						<reference key="parent" ref="892078337"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -3617,6 +3640,7 @@
 					<string>58.IBPluginDependency</string>
 					<string>58.ImportedFromIB2</string>
 					<string>581.IBPluginDependency</string>
+					<string>584.IBPluginDependency</string>
 					<string>72.IBPluginDependency</string>
 					<string>72.ImportedFromIB2</string>
 					<string>73.IBPluginDependency</string>
@@ -3751,7 +3775,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{525, 802}, {197, 73}}</string>
-					<string>{{487, 691}, {453, 20}}</string>
+					<string>{{420, 685}, {453, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{74, 862}</string>
@@ -3777,7 +3801,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{609, 343}, {83, 43}}</string>
+					<string>{{625, 622}, {230, 63}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3891,7 +3915,6 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3906,7 +3929,9 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{606, 468}, {217, 223}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="1"/>
+					<string>{{539, 462}, {217, 223}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{155, 774}, {199, 203}}</string>
@@ -3934,7 +3959,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">583</int>
+			<int key="maxID">585</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3942,17 +3967,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">AppDelegate</string>
 					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">previewFrontDocument:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">previewFrontDocument:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">previewFrontDocument:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">stylesChooser</string>
 						<string key="NS.object.0">NSPopUpButton</string>
@@ -3978,9 +3992,11 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>previewHTMLAction:</string>
 							<string>tidyRulers:</string>
+							<string>unWrapParagraphs:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -3991,6 +4007,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>previewHTMLAction:</string>
 							<string>tidyRulers:</string>
+							<string>unWrapParagraphs:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4000,6 +4017,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">tidyRulers:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">unWrapParagraphs:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

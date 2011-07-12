@@ -257,6 +257,19 @@
 	[hl formatBlockQuotes];
 }
 
+- (IBAction)unWrapParagraphs:(id)sender
+{
+	NSRange selectionRange = [textView rangeForUserTextChange];
+	
+	if (selectionRange.length == 0)
+	{
+		// Unwrap all paragraphs
+		[hl unWrapParagraphsWithRange:NSMakeRange(0, [[textView string] length])];
+	} else {
+		// Unwrap current paragraph
+		[hl unWrapParagraphsWithRange:selectionRange];
+	}
+}
 
 
 @end

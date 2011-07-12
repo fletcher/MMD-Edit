@@ -507,6 +507,63 @@
 																		 options:NSBackwardsSearch 
 																		   range:NSMakeRange(start, len)];			
 	}
-	
 }
+
+
+- (void)unWrapParagraphsWithRange:(NSRange)range
+{
+	// iterate through paragraphs and remove newlines
+
+	NSArray *paraRanges = [self rangesForElementType: PARA];
+	
+	// End if no paragraphs
+	if ([paraRanges count] ==0)
+		return;
+	
+	// Check PARAs to see if one is in range
+	// Check backwards so we don't screw things up
+	NSEnumerator *enumerator = [paraRanges reverseObjectEnumerator];
+	id aParaRange;
+	NSRange paraRange;
+	NSRange intersection;
+	
+	while (aParaRange = [enumerator nextObject]) {
+		paraRange = NSRangeFromString(aParaRange);
+		intersection = NSIntersectionRange(paraRange, range);
+		
+		// Skip if we're not in this table
+		if (intersection.length == 0)
+			continue;
+		
+		NSRange newLineRange;
+		int start = paraRange.location;
+		int end;
+		
+		// iterate over newlines and replace with
+		newLineRange = [[[self.targetTextView textStorage] string] rangeOfString:@"\n"
+																		options:NSBackwardsSearch 
+																		range:paraRange];
+		[[self.targetTextView textStorage] beginEditing];
+		while (newLineRange.length != 0) {
+			// don't change linebreaks
+			if (![[[[self.targetTextView textStorage] string] 
+				  substringWithRange:NSMakeRange(newLineRange.location-2, 2)] isEqualToString:@"  "])
+			{
+				[[self.targetTextView textStorage] replaceCharactersInRange:newLineRange withString:@" "];
+			}
+			
+			end = newLineRange.location-start;
+			newLineRange = [[[self.targetTextView textStorage] string] rangeOfString:@"\n"
+																			 options:NSBackwardsSearch 
+																			   range:NSMakeRange(start, end)];
+			
+		}
+		[[self.targetTextView textStorage] endEditing];
+
+	}
+	[self parseAndHighlightNow];
+	self.highlightingIsDirty = YES;
+}
+
+
 @end

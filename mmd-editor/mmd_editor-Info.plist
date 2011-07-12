@@ -10,6 +10,10 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>txt</string>
+				<string>md</string>
+				<string>mmd</string>
+				<string>mdown</string>
+				<string>text</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
