@@ -33,6 +33,7 @@
 - (IBAction)tidyRulers:(id)sender;
 - (IBAction)unWrapParagraphs:(id)sender;
 
+- (IBAction)openDocumentInMarked:(id)sender;
 
 - (void) handleStyleParsingErrors:(NSArray *)errorMessages;
 

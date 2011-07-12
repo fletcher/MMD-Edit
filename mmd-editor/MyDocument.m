@@ -271,5 +271,16 @@
 	}
 }
 
+- (IBAction)openDocumentInMarked:(id)sender
+{
+	// Open current document in Brett Terpstra's Marked application for previewing
+	if ([self fileURL] != nil){
+		[[NSWorkspace sharedWorkspace] openFile:[[self fileURL] path] withApplication:@"Marked"];
+		
+		// But we want to stay on top
+		[[NSApplication sharedApplication] activateIgnoringOtherApps : YES];
+		[[self windowForSheet] becomeKeyWindow];
+	}
+}
 
 @end
