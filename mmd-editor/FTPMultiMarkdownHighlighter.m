@@ -339,7 +339,8 @@
 			continue;
 		} else {
 			// We found the right line
-			int startValue = metaKeyRange.location+metaKeyRange.length;
+			//int startValue = metaKeyRange.location+metaKeyRange.length;
+			int startValue = metaKeyRange.location;
 
 			// find the ':'
 			[metaScanner setScanLocation:startValue];
