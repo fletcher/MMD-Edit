@@ -299,7 +299,7 @@
 - (void) updateWhitespaceWithRange:(NSRange)range
 {
 	[self updateMetadataWhitespaceWithRange:range];
-	
+	[self updateTableWhitespaceWithRange:range];
 }
 
 - (void) updateMetadataWhitespaceWithRange:(NSRange)range
@@ -361,6 +361,100 @@
 		}
 	}
 	
+}
+
+- (void) updateTableWhitespaceWithRange:(NSRange)range
+{
+	NSArray *tableRanges = [self rangesForElementType: TABLE];
+	
+	// End if no tables
+	if ([tableRanges count] ==0)
+		return;
+	
+	
+	// Check tables to see if one is in range
+	NSEnumerator *enumerator = [tableRanges objectEnumerator];
+	id aTableRange;
+	NSRange tableRange;
+	NSRange intersection;
+	
+	while (aTableRange = [enumerator nextObject]) {
+		tableRange = NSRangeFromString(aTableRange);
+		intersection = NSIntersectionRange(tableRange, range);
+		
+		// Skip if we're not in this table
+		if (intersection.length == 0)
+			continue;
+		
+		NSLog(@"we're in a table");
+		
+		// Don't mess with newline
+		NSRange lineRange = NSMakeRange(range.location, range.length-1);
+		
+		// TODO: Need to split into the line before cursor
+		//	and the line after cursor - otherwise insertion point booted to end of line
+		
+		NSRange lastRange = NSIntersectionRange(lineRange, 
+												NSMakeRange([self.targetTextView rangeForUserCompletion].location+1,
+												[[self.targetTextView textStorage] length]));
+		
+		NSString *lineEnding = [[[self.targetTextView textStorage] string]
+								substringWithRange:lastRange];
+		
+		[[self.targetTextView textStorage]
+		 replaceCharactersInRange:lastRange
+		 withString:[self reformatTableString:lineEnding formatEnd:NO]];
+
+		
+		NSRange firstRange = NSIntersectionRange(lineRange,
+												 NSMakeRange(0,[self.targetTextView rangeForUserCompletion].location-1));
+		
+		NSString *lineBeginning = [[[self.targetTextView textStorage] string]
+								substringWithRange:firstRange];
+
+		[[self.targetTextView textStorage]
+		 replaceCharactersInRange:firstRange
+		 withString:[self reformatTableString:lineBeginning formatEnd:YES]];
+		
+		
+		break;
+	}
+}
+
+- (NSString *)reformatTableString:(NSString *)original formatEnd:(BOOL) andEnd
+{
+	NSCharacterSet *spaceSet = [NSCharacterSet characterSetWithCharactersInString:@"\t"];
+
+	NSArray *cellStrings = [original componentsSeparatedByString:@"|"];
+	id cellString;
+	
+	NSMutableString *newRow = [[NSMutableString alloc] init];
+	int counter = 0;
+	
+	for (cellString in cellStrings) {
+		counter++;
+		if ([cellString length] == 0)
+		{
+			if (counter != [cellStrings count])
+				[newRow appendString:@"|"];
+			continue;
+		}
+		NSLog(@"cell '%@'",cellString);
+		
+		if (counter != [cellStrings count]) {
+			[newRow appendString:[cellString stringByTrimmingCharactersInSet:spaceSet]];
+			[newRow appendString:@"\t|"];
+		} else {
+			if (andEnd) {
+				[newRow appendString:[cellString stringByTrimmingCharactersInSet:spaceSet]];
+		//		[newRow appendString:@"\t"];
+			} else{
+				[newRow appendString:cellString];
+			}
+		}			 
+	}
+	
+	return newRow;
 }
 
 @end
