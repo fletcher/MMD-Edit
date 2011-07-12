@@ -233,11 +233,19 @@
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"previewWithMarked"]) {
 		// Open current document in Brett Terpstra's Marked application for previewing
 		if ([self fileURL] != nil){
-			[[NSWorkspace sharedWorkspace] openFile:[[self fileURL] path] withApplication:@"Marked"];
 			
-			// But we want to stay on top
-			[[NSApplication sharedApplication] activateIgnoringOtherApps : YES];
-			[[self windowForSheet] becomeKeyWindow];
+			if ([[NSWorkspace sharedWorkspace] openFile:[[self fileURL] path] withApplication:@"Marked"])
+			{
+				// But we want to stay on top
+				[[NSApplication sharedApplication] activateIgnoringOtherApps : YES];
+				[[self windowForSheet] becomeKeyWindow];
+			} else {
+				// Can't find Marked
+				NSLog(@"Application 'Marked' doesn't appear to be available");
+				[previewPanel makeKeyAndOrderFront:nil];
+				[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
+			}
+
 		}
 	}else {
 		[previewPanel makeKeyAndOrderFront:nil];
