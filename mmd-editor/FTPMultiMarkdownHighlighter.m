@@ -365,6 +365,33 @@
 	
 }
 
+- (void)reFormatEachMetadataLine
+{
+	NSArray *metaDataRanges = [self rangesForElementType:METADATA];
+	
+	// End if no metadata
+	if ([metaDataRanges count] == 0)
+		return;
+	
+	// Cycle through keys and reformat each, working backwards
+	NSArray *metaKeyRanges = [self rangesForElementType:METAKEY];
+	NSEnumerator *enumerator = [metaKeyRanges reverseObjectEnumerator];
+	id metaKeyRange;
+	NSRange aRange;
+	
+	while (metaKeyRange = [enumerator nextObject]) {
+		aRange = NSRangeFromString(metaKeyRange);
+		
+		[self updateMetadataWhitespaceWithRange:aRange];
+	}
+	
+	// And remove duplicate tabs
+	[self stripSerialTabsFromRange:NSRangeFromString([metaDataRanges objectAtIndex:0])];
+	self.highlightingIsDirty = YES;
+	[self parseAndHighlightNow];
+}
+
+
 - (void) updateTableWhitespaceWithRange:(NSRange)range
 {
 	NSArray *tableRanges = [self rangesForElementType: TABLE];
@@ -566,5 +593,19 @@
 	self.highlightingIsDirty = YES;
 }
 
+- (void) stripSerialTabsFromRange:(NSRange)range
+{
+	// Break range into an array divided by '\t' and remove duplicates
+	
+	id parts = [NSMutableArray arrayWithArray:[[[[self.targetTextView textStorage] string] 
+												substringWithRange:range] 
+											   componentsSeparatedByString:@"\t"]];
+	
+	[parts removeObject:@""]; // that's the empty string
+	NSString *newString = [parts componentsJoinedByString:@"\t"];
+	
+	[[self.targetTextView textStorage] replaceCharactersInRange:range withString:newString];
+	
+}
 
 @end

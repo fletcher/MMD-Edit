@@ -44,6 +44,9 @@
 
 - (void)unWrapParagraphsWithRange:(NSRange)range;
 
+- (void)reFormatEachMetadataLine;
+- (void) stripSerialTabsFromRange:(NSRange)range;
+
 @property BOOL formatParagraphs;
 
 @end

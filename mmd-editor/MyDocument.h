@@ -37,6 +37,8 @@
 
 - (void) handleStyleParsingErrors:(NSArray *)errorMessages;
 
+- (IBAction)reWrapMetaData:(id)sender;
+
 @property BOOL isMMD;
 
 @end

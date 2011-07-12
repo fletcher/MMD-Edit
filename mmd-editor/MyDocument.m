@@ -293,8 +293,9 @@
 	}
 }
 
-- (IBAction)openDocumentInMarked:(id)sender
+- (IBAction)reWrapMetaData:(id)sender
 {
+	[hl reFormatEachMetadataLine];
 }
 
 @end
