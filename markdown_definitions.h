@@ -60,6 +60,7 @@ typedef enum
 	CITATION,
 	FOOTNOTE,
 	MATHSPAN,
+	FUTURETABLE,
 	TABLE,
 	TABLEROW,
 	TABLESEPARATOR,
@@ -86,7 +87,7 @@ typedef enum
 * \brief Number of types in element_type.
 * \sa element_type
 */
-#define NUM_TYPES 43
+#define NUM_TYPES 44
 
 /**
 * \brief Number of *language element* types in element_type.

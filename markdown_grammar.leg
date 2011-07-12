@@ -51,6 +51,7 @@ Block =     BlankLine*
             | HtmlBlock
             | StyleBlock
             | &{ EXT(EXT_MMD) } Table
+			| &{ EXT(EXT_MMD) } FutureTable
             | Para
             | Plain )
 
@@ -747,6 +748,10 @@ MathSpan = s:LocMarker
 
 
 ## Tables
+
+FutureTable = < s:LocMarker
+	 TableRow > !(&TableRow | &SeparatorLine)
+	{ ADD(elem_s(FUTURETABLE)); }
 
 Table = s:LocMarker
 	< (TableCaption)?

@@ -300,6 +300,7 @@
 {
 	[self updateMetadataWhitespaceWithRange:range];
 	[self updateTableWhitespaceWithRange:range];
+	[self updateFutureTableWithRange:range];
 }
 
 - (void) updateMetadataWhitespaceWithRange:(NSRange)range
@@ -387,86 +388,125 @@
 			continue;
 		
 		NSRange lineRange = [self.targetTextView rangeForUserParagraphAttributeChange];
-
-		// Don't mess with newline
-		int start = lineRange.location;
-		int len = lineRange.length-1;
-
-		NSRange dividerRange = [[[self.targetTextView textStorage] string] rangeOfString:@"|"
-																		 options:NSBackwardsSearch 
-																				   range:NSMakeRange(start, len)];
 		
-		NSCharacterSet *trailingValidSet = [NSCharacterSet characterSetWithCharactersInString:@"| \t\n\r"];
-		NSCharacterSet *leadingValidSet = [NSCharacterSet characterSetWithCharactersInString:@"|\t"];
+		// Tweak this line
+		[self updateTableRowSpacingWithRange:lineRange];
 		
-		// Need to work from end of line to avoid tripping over ourselves
-		while (dividerRange.length != 0)
-		{
-			// found '|'
-			
-			// '|' should be followed by '|', or whitespace
-			if (![trailingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
-													 characterAtIndex:dividerRange.location+dividerRange.length]])
-				[[self.targetTextView textStorage] replaceCharactersInRange:
-				  NSMakeRange(dividerRange.location+dividerRange.length, 0) withString:@" "];
-			
-			// '|' should be preceded by '|' or tab
-			if (![leadingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
-													 characterAtIndex:dividerRange.location-1]])
-				[[self.targetTextView textStorage] replaceCharactersInRange:
-				 NSMakeRange(dividerRange.location, 0) withString:@"\t"];
-
-			
-			len = dividerRange.location-start;
-			if (len < 0) {
-				break;
-			}
-			
-			// Find next '|'
-			dividerRange = [[[self.targetTextView textStorage] string] rangeOfString:@"|"
-																					 options:NSBackwardsSearch 
-																					   range:NSMakeRange(start, len)];			
-		}
-		
-		// Finished current line, so we're done
 		break;
 	}
 }
 
-- (NSString *)reformatTableString:(NSString *)original formatEnd:(BOOL) andEnd
-{
-	NSCharacterSet *spaceSet = [NSCharacterSet characterSetWithCharactersInString:@"\t"];
 
-	NSArray *cellStrings = [original componentsSeparatedByString:@"|"];
-	id cellString;
+- (void) updateFutureTableWithRange:(NSRange)range
+{
+	NSArray *tableRanges = [self rangesForElementType: FUTURETABLE];
 	
-	NSMutableString *newRow = [[NSMutableString alloc] init];
-	int counter = 0;
+	// End if no futuretables
+	if ([tableRanges count] ==0)
+		return;
+		
+	// Check future tables to see if one is in range
+	NSEnumerator *enumerator = [tableRanges objectEnumerator];
+	id aTableRange;
+	NSRange tableRange;
+	NSRange intersection;
 	
-	for (cellString in cellStrings) {
-		counter++;
-		if ([cellString length] == 0)
+	while (aTableRange = [enumerator nextObject]) {
+		tableRange = NSRangeFromString(aTableRange);
+		intersection = NSIntersectionRange(tableRange, range);
+		
+		// Skip if we're not in this table
+		if (intersection.length == 0)
 		{
-			if (counter != [cellStrings count])
-				[newRow appendString:@"|"];
+			if (range.length >1)
+				continue;
+			
+			if (tableRange.location+tableRange.length+1> range.location) {
+				// We're not in the future table, but we are on next line which is basically empty
+
+				// So now we want to copy the header line and make a separator line out of it
+				NSString *headerLine = [[[self.targetTextView textStorage] string] substringWithRange:tableRange];
+				NSMutableString *separatorLine = [NSMutableString stringWithString:headerLine];
+				
+				NSScanner *tabScanner = [NSScanner scannerWithString:headerLine];
+				[tabScanner setCharactersToBeSkipped:nil];
+
+				NSCharacterSet *dontChange = [NSCharacterSet characterSetWithCharactersInString:@"|\t\n\r"];
+				NSRange replaceRange;
+				int curPos = 0;
+				
+				// TODO: need to trap error when this template string isn't long enough
+				NSString *template = [NSString stringWithString:@"----------------------------------------------------------------------------------------------------------------------------"];
+				
+				
+				while ([tabScanner isAtEnd] == NO) {
+					[tabScanner scanCharactersFromSet:[dontChange invertedSet] intoString:NULL];
+					replaceRange = NSMakeRange(curPos, [tabScanner scanLocation]-curPos);
+					curPos = [tabScanner scanLocation]+1;
+					[separatorLine replaceCharactersInRange:replaceRange withString:[template
+																					 substringWithRange:replaceRange]];
+					[tabScanner setScanLocation:curPos];
+				}
+				
+				// Insert the separator line
+				[[self.targetTextView textStorage] replaceCharactersInRange:
+				 range withString:separatorLine];
+				
+				
+			}
 			continue;
 		}
-		NSLog(@"cell '%@'",cellString);
 		
-		if (counter != [cellStrings count]) {
-			[newRow appendString:[cellString stringByTrimmingCharactersInSet:spaceSet]];
-			[newRow appendString:@"\t|"];
-		} else {
-			if (andEnd) {
-				[newRow appendString:[cellString stringByTrimmingCharactersInSet:spaceSet]];
-		//		[newRow appendString:@"\t"];
-			} else{
-				[newRow appendString:cellString];
-			}
-		}			 
+		// Update spacing to include tabs
+		NSRange lineRange = [self.targetTextView rangeForUserParagraphAttributeChange];
+		[self updateTableRowSpacingWithRange:lineRange];
+		
+		
 	}
-	
-	return newRow;
 }
 
+-(void)updateTableRowSpacingWithRange:(NSRange)lineRange
+{
+	
+	// Don't mess with newline
+	int start = lineRange.location;
+	int len = lineRange.length-1;
+	
+	NSRange dividerRange = [[[self.targetTextView textStorage] string] rangeOfString:@"|"
+																			 options:NSBackwardsSearch 
+																			   range:NSMakeRange(start, len)];
+	
+	NSCharacterSet *trailingValidSet = [NSCharacterSet characterSetWithCharactersInString:@"| \t\n\r"];
+	NSCharacterSet *leadingValidSet = [NSCharacterSet characterSetWithCharactersInString:@"|\t"];
+	
+	// Need to work from end of line to avoid tripping over ourselves
+	while (dividerRange.length != 0)
+	{
+		// found '|'
+		
+		// '|' should be followed by '|', or whitespace
+		if (![trailingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
+												  characterAtIndex:dividerRange.location+dividerRange.length]])
+			[[self.targetTextView textStorage] replaceCharactersInRange:
+			 NSMakeRange(dividerRange.location+dividerRange.length, 0) withString:@" "];
+		
+		// '|' should be preceded by '|' or tab
+		if (![leadingValidSet characterIsMember:[[[self.targetTextView textStorage] string]
+												 characterAtIndex:dividerRange.location-1]])
+			[[self.targetTextView textStorage] replaceCharactersInRange:
+			 NSMakeRange(dividerRange.location, 0) withString:@"\t"];
+		
+		
+		len = dividerRange.location-start;
+		if (len < 0) {
+			break;
+		}
+		
+		// Find next '|'
+		dividerRange = [[[self.targetTextView textStorage] string] rangeOfString:@"|"
+																		 options:NSBackwardsSearch 
+																		   range:NSMakeRange(start, len)];			
+	}
+	
+}
 @end

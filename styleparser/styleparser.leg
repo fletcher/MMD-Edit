@@ -259,6 +259,7 @@ char **get_element_type_names()
 		elem_type_names[CITATION] = "CITATION";
 		elem_type_names[FOOTNOTE] = "FOOTNOTE";
 		elem_type_names[MATHSPAN] = "MATHSPAN";
+		elem_type_names[FUTURETABLE] = "FUTURETABLE";
 		elem_type_names[TABLE] = "TABLE";
 		elem_type_names[TABLEROW] = "TABLEROW";
 		elem_type_names[TABLESEPARATOR] = "TABLESEPARATOR";

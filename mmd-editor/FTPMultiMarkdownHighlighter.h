@@ -38,8 +38,9 @@
 - (void)updateWhitespaceWithRange:(NSRange) range;
 - (void)updateMetadataWhitespaceWithRange:(NSRange)range;
 - (void)updateTableWhitespaceWithRange:(NSRange)range;
+- (void) updateFutureTableWithRange:(NSRange)range;
 
-- (NSString *)reformatTableString:(NSString *)original formatEnd:(BOOL) andEnd;
+-(void)updateTableRowSpacingWithRange:(NSRange)lineRange;
 
 @property BOOL formatParagraphs;
 
