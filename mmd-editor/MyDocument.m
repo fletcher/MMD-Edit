@@ -42,6 +42,10 @@
 	[appDefaults setValue:[NSNumber numberWithBool:YES]
 			   forKey:@"useMultiMarkdown"];
 	
+	// Preview with Marked?
+	[appDefaults setValue:[NSNumber numberWithBool:YES]
+				   forKey:@"previewWithMarked"];
+	
 	[defaults registerDefaults:appDefaults];
 }
 
@@ -226,9 +230,19 @@
 {
 //	NSLog(@"creating preview");
 	
-	[previewPanel makeKeyAndOrderFront:nil];
-	[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
-	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"previewWithMarked"]) {
+		// Open current document in Brett Terpstra's Marked application for previewing
+		if ([self fileURL] != nil){
+			[[NSWorkspace sharedWorkspace] openFile:[[self fileURL] path] withApplication:@"Marked"];
+			
+			// But we want to stay on top
+			[[NSApplication sharedApplication] activateIgnoringOtherApps : YES];
+			[[self windowForSheet] becomeKeyWindow];
+		}
+	}else {
+		[previewPanel makeKeyAndOrderFront:nil];
+		[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
+	}
 }
 
 - (void) setIsMMD: (BOOL) newMMD {
@@ -273,14 +287,6 @@
 
 - (IBAction)openDocumentInMarked:(id)sender
 {
-	// Open current document in Brett Terpstra's Marked application for previewing
-	if ([self fileURL] != nil){
-		[[NSWorkspace sharedWorkspace] openFile:[[self fileURL] path] withApplication:@"Marked"];
-		
-		// But we want to stay on top
-		[[NSApplication sharedApplication] activateIgnoringOtherApps : YES];
-		[[self windowForSheet] becomeKeyWindow];
-	}
 }
 
 @end
