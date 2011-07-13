@@ -14,11 +14,13 @@
 				<string>mmd</string>
 				<string>mdown</string>
 				<string>text</string>
+				<string>markdn</string>
+				<string>markdown</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeName</key>
-			<string>DocumentType</string>
+			<string>MultiMarkdown Text Document</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>TXT</string>
