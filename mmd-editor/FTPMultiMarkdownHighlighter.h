@@ -47,6 +47,8 @@
 - (void)reFormatEachMetadataLine;
 - (void) stripSerialTabsFromRange:(NSRange)range;
 
+- (void) updateEntireTableWhitespaceWithRange:(NSRange)range;
+
 @property BOOL formatParagraphs;
 
 @end

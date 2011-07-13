@@ -191,7 +191,6 @@
 	
 	NSString *path2MMD = @"/usr/local/bin/multimarkdown";
 
-//	NSLog(@"launching %@", [path2MMD stringByExpandingTildeInPath]);
 	NSTask* task = [[NSTask alloc] init];
 	[task setLaunchPath: [path2MMD stringByExpandingTildeInPath]];
 	
@@ -227,9 +226,7 @@
 }
 
 - (IBAction)previewHTMLAction:(id)sender;
-{
-//	NSLog(@"creating preview");
-	
+{	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"previewWithMarked"]) {
 		// Open current document in Brett Terpstra's Marked application for previewing
 		if ([self fileURL] != nil){
@@ -297,5 +294,31 @@
 {
 	[hl reFormatEachMetadataLine];
 }
+
+- (IBAction)reWrapTables:(id)sender
+{
+	[hl updateEntireTableWhitespaceWithRange:NSMakeRange(0, [[textView string] length])];
+}
+
+- (IBAction)totalReformat:(id)sender
+{
+	NSRange selectionRange = [textView rangeForUserTextChange];
+	// TODO: Need a way to wait on reparsing to complete before moving on
+	
+	// Unwrap all paragraphs and tables
+	if (selectionRange.length == 0)
+	{
+		// Nothing is selected so do everything
+//		[hl updateEntireTableWhitespaceWithRange:NSMakeRange(0, [[textView string] length])];
+		[hl unWrapParagraphsWithRange:NSMakeRange(0, [[textView string] length])];
+	} else {
+		// Only reformat the selection
+//		[hl updateEntireTableWhitespaceWithRange:selectionRange];
+		[hl unWrapParagraphsWithRange:selectionRange];
+	}
+
+	[hl reFormatEachMetadataLine];
+}
+
 
 @end

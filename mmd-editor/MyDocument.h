@@ -31,13 +31,13 @@
 - (IBAction)previewHTMLAction:(id)sender;
 
 - (IBAction)tidyRulers:(id)sender;
-- (IBAction)unWrapParagraphs:(id)sender;
 
-- (IBAction)openDocumentInMarked:(id)sender;
+- (IBAction)unWrapParagraphs:(id)sender;
+- (IBAction)reWrapMetaData:(id)sender;
+- (IBAction)reWrapTables:(id)sender;
+- (IBAction)totalReformat:(id)sender;
 
 - (void) handleStyleParsingErrors:(NSArray *)errorMessages;
-
-- (IBAction)reWrapMetaData:(id)sender;
 
 @property BOOL isMMD;
 

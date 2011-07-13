@@ -97,9 +97,6 @@
 	if (intersection.length == 0)
 		return;
 	
-
-	//	NSLog(@"Found range %@",metaDataRangeString);
-	//	[hl clearHighlightingForRange:metaDataRange];
 	
 	NSArray *metaKeyArray = [self rangesForElementType:METAKEY inRange:metaDataRange];
 	
@@ -108,7 +105,6 @@
 	
 	while (aMetaKeyString = [enumerator nextObject]) {
 		NSRange theRange = NSRangeFromString(aMetaKeyString);
-		//		NSLog(@"Metakey range %@",aMetaKeyString);
 		
 		if (theRange.length > maxWidth)
 		{
@@ -238,8 +234,6 @@
 			tabTotal += (charWidth * (colWidth[i] + 3));
 			
 			[paraStyle addTabStop:[[[NSTextTab alloc] initWithType:NSLeftTabStopType location:tabTotal] autorelease]];
-			
-			//			NSLog(@"Max width for column %d is %d",i,colWidth[i]);
 		}
 		
 		[[self.targetTextView textStorage] addAttribute:NSParagraphStyleAttributeName
@@ -505,7 +499,7 @@
 																			   range:NSMakeRange(start, len)];
 	
 	NSCharacterSet *trailingValidSet = [NSCharacterSet characterSetWithCharactersInString:@"| \t\n\r"];
-	NSCharacterSet *leadingValidSet = [NSCharacterSet characterSetWithCharactersInString:@"|\t"];
+	NSCharacterSet *leadingValidSet = [NSCharacterSet characterSetWithCharactersInString:@"|\t\n"];
 	
 	// Need to work from end of line to avoid tripping over ourselves
 	while (dividerRange.length != 0)
@@ -567,7 +561,6 @@
 		NSMutableString *paragraphString = [NSMutableString stringWithString:[[[self.targetTextView textStorage] string]
 											substringWithRange:paraRange]];
 		
-		NSLog(@"Checking: %@",paragraphString);
 		// remove newlines
 		[paragraphString replaceOccurrencesOfString:@"\n" 
 										 withString:@" "
@@ -590,8 +583,8 @@
 		[[self.targetTextView textStorage] endEditing];
 
 	}
-	[self parseAndHighlightNow];
 	self.highlightingIsDirty = YES;
+	[self parseAndHighlightNow];
 }
 
 - (void) stripSerialTabsFromRange:(NSRange)range
@@ -608,5 +601,37 @@
 	[[self.targetTextView textStorage] replaceCharactersInRange:range withString:newString];
 	
 }
+
+- (void) updateEntireTableWhitespaceWithRange:(NSRange)range
+{
+	NSArray *tableRanges = [self rangesForElementType: TABLE];
+	
+	// End if no tables
+	if ([tableRanges count] ==0)
+		return;
+	
+	
+	// Check tables to see if one is in range
+	NSEnumerator *enumerator = [tableRanges reverseObjectEnumerator];
+	id aTableRange;
+	NSRange tableRange;
+	NSRange intersection;
+	
+	while (aTableRange = [enumerator nextObject]) {
+		tableRange = NSRangeFromString(aTableRange);
+		intersection = NSIntersectionRange(tableRange, range);
+		
+		// Skip if we're not in this table
+		if (intersection.length == 0)
+			continue;
+				
+		// Tweak this line
+		[self updateTableRowSpacingWithRange:tableRange];
+		
+	}
+	self.highlightingIsDirty = YES;
+	[self parseAndHighlightNow];
+}
+
 
 @end

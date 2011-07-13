@@ -729,6 +729,24 @@
 							<string key="NSTitle">Format</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="1015408586">
+									<reference key="NSMenu" ref="892078337"/>
+									<string key="NSTitle">Rewrap everything</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="212064189">
+									<reference key="NSMenu" ref="892078337"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="715235018">
 									<reference key="NSMenu" ref="892078337"/>
 									<string key="NSTitle">Unwrap Paragraph(s)</string>
@@ -738,9 +756,27 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
-								<object class="NSMenuItem" id="899448705">
+								<object class="NSMenuItem" id="802087247">
 									<reference key="NSMenu" ref="892078337"/>
 									<string key="NSTitle">Rewrap Metadata</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="386359306">
+									<reference key="NSMenu" ref="892078337"/>
+									<string key="NSTitle">Rewrap Tables</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="1026291686">
+									<reference key="NSMenu" ref="892078337"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -2291,9 +2327,25 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">reWrapMetaData:</string>
 						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="899448705"/>
+						<reference key="destination" ref="802087247"/>
 					</object>
 					<int key="connectionID">600</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">reWrapTables:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="386359306"/>
+					</object>
+					<int key="connectionID">602</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">totalReformat:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="1015408586"/>
+					</object>
+					<int key="connectionID">606</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2856,7 +2908,11 @@
 							<reference ref="417081885"/>
 							<reference ref="236885983"/>
 							<reference ref="715235018"/>
-							<reference ref="899448705"/>
+							<reference ref="802087247"/>
+							<reference ref="386359306"/>
+							<reference ref="1026291686"/>
+							<reference ref="1015408586"/>
+							<reference ref="212064189"/>
 						</object>
 						<reference key="parent" ref="470804886"/>
 					</object>
@@ -3452,7 +3508,27 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">599</int>
-						<reference key="object" ref="899448705"/>
+						<reference key="object" ref="802087247"/>
+						<reference key="parent" ref="892078337"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">601</int>
+						<reference key="object" ref="386359306"/>
+						<reference key="parent" ref="892078337"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">603</int>
+						<reference key="object" ref="1026291686"/>
+						<reference key="parent" ref="892078337"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">604</int>
+						<reference key="object" ref="1015408586"/>
+						<reference key="parent" ref="892078337"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">605</int>
+						<reference key="object" ref="212064189"/>
 						<reference key="parent" ref="892078337"/>
 					</object>
 				</object>
@@ -3704,6 +3780,10 @@
 					<string>595.IBViewBoundsToFrameTransform</string>
 					<string>596.IBPluginDependency</string>
 					<string>599.IBPluginDependency</string>
+					<string>601.IBPluginDependency</string>
+					<string>603.IBPluginDependency</string>
+					<string>604.IBPluginDependency</string>
+					<string>605.IBPluginDependency</string>
 					<string>72.IBPluginDependency</string>
 					<string>72.ImportedFromIB2</string>
 					<string>73.IBPluginDependency</string>
@@ -3864,7 +3944,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{577, 477}, {230, 83}}</string>
+					<string>{{577, 417}, {230, 143}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3985,6 +4065,10 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
@@ -4028,7 +4112,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">600</int>
+			<int key="maxID">606</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4062,11 +4146,15 @@
 							<string>openDocumentInMarked:</string>
 							<string>previewHTMLAction:</string>
 							<string>reWrapMetaData:</string>
+							<string>reWrapTables:</string>
 							<string>tidyRulers:</string>
+							<string>totalReformat:</string>
 							<string>unWrapParagraphs:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -4081,7 +4169,9 @@
 							<string>openDocumentInMarked:</string>
 							<string>previewHTMLAction:</string>
 							<string>reWrapMetaData:</string>
+							<string>reWrapTables:</string>
 							<string>tidyRulers:</string>
+							<string>totalReformat:</string>
 							<string>unWrapParagraphs:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -4099,7 +4189,15 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">reWrapTables:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">tidyRulers:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">totalReformat:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
