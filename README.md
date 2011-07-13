@@ -1,8 +1,5 @@
 # MMD-Editor #
 
-And more.
-
-
 This project creates a Mac OS X text editor that performs syntax-highlighting for MultiMarkdown documents.
 
 It based on work by Ali Rantakari:
