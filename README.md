@@ -65,6 +65,8 @@ To compile, you must be using Mac OS X, with Developers Tools installed.
 from the MMD-Editor directory, type:
 
 	make markdown_parser.c
+	cd styleparser
+	make
 
 Then open `mmd-editor/mmd-editor.xcodeproj`, change the configuration to "Release | x86_64" in the upper left, and build.
 
