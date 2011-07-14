@@ -560,6 +560,11 @@
 		// get substring for paragraph
 		NSMutableString *paragraphString = [NSMutableString stringWithString:[[[self.targetTextView textStorage] string]
 											substringWithRange:paraRange]];
+		// preserve intentional breaks
+		[paragraphString replaceOccurrencesOfString:@"  \n"
+										withString:@"MMD-MARKER"
+											options:NSCaseInsensitiveSearch
+											  range:NSMakeRange(0, [paragraphString length])];
 		
 		// remove newlines
 		[paragraphString replaceOccurrencesOfString:@"\n" 
@@ -567,21 +572,27 @@
 											options:NSCaseInsensitiveSearch 
 											  range:NSMakeRange(0, [paragraphString length])];
 		
-		// replace repeated spaces with single
+		// replace repeated spaces with single space
 		id parts = [NSMutableArray arrayWithArray:[paragraphString componentsSeparatedByString:@" "]];
-		
 		[parts removeObject:@""];
 		
 		// TODO: Fix this - it's a crutch to work around the fact that blockquotes and PARA don't work together
 		// properly in Ali's parser and I haven't fixed it yet.
 		[parts addObject:@""];
 		
-		NSString *newParagraph = [parts componentsJoinedByString:@" "];
+		// And restore to a string
+		NSMutableString *newParagraph = [NSMutableString stringWithString:[parts componentsJoinedByString:@" "]];
 
+		// restore intentional breaks
+		[newParagraph replaceOccurrencesOfString:@"MMD-MARKER"
+										 withString:@"  \n"
+											options:NSCaseInsensitiveSearch
+											  range:NSMakeRange(0, [newParagraph length])];
+		
+		
 		[[self.targetTextView textStorage] replaceCharactersInRange:paraRange withString:newParagraph];
 		
 		[[self.targetTextView textStorage] endEditing];
-
 	}
 	self.highlightingIsDirty = YES;
 	[self parseAndHighlightNow];
