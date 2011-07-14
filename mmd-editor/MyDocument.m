@@ -45,6 +45,10 @@
 	// Preview with Marked?
 	[appDefaults setValue:[NSNumber numberWithBool:YES]
 				   forKey:@"previewWithMarked"];
+
+	// Clickable Links?
+	[appDefaults setValue:[NSNumber numberWithBool:YES]
+				   forKey:@"makeLinksClickable"];
 	
 	[defaults registerDefaults:appDefaults];
 }
@@ -94,12 +98,12 @@
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;
-		hl.makeLinksClickable = YES;
-
 		
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useMultiMarkdown"]) {
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"makeLinksClickable"])
+			hl.makeLinksClickable = YES;
+		
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useMultiMarkdown"])
 			hl.extensions = hl.extensions | EXT_MMD;
-		}
 		
 		hl.formatParagraphs = YES;
 		
@@ -229,25 +233,23 @@
 {	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"previewWithMarked"]) {
 		// Open current document in Brett Terpstra's Marked application for previewing
+		
+		// If it's been saved to a file
 		if ([self fileURL] != nil){
-			
+			// And if we can find Marked
 			if ([[NSWorkspace sharedWorkspace] openFile:[[self fileURL] path] withApplication:@"Marked"])
 			{
-				// But we want to stay on top
-				[[NSApplication sharedApplication] activateIgnoringOtherApps : YES];
+				// But we want to stay on top if possible
+				[[NSApplication sharedApplication] activateIgnoringOtherApps: YES];
 				[[self windowForSheet] becomeKeyWindow];
-			} else {
-				// Can't find Marked
-				NSLog(@"Application 'Marked' doesn't appear to be available");
-				[previewPanel makeKeyAndOrderFront:nil];
-				[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
+				return;
 			}
-
-		}
-	}else {
-		[previewPanel makeKeyAndOrderFront:nil];
-		[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
+		} 
 	}
+
+	// In all other cases, use built in preview
+	[previewPanel makeKeyAndOrderFront:nil];
+	[[previewView mainFrame] loadHTMLString:[self htmlForText] baseURL:[self fileURL]];
 }
 
 - (void) setIsMMD: (BOOL) newMMD {
@@ -319,6 +321,253 @@
 
 	[hl reFormatEachMetadataLine];
 }
+
+
+- (void)myChangeFont:(id)sender
+{
+	BOOL fontDebug = NO;	// Enable debugging hints when something is awry
+	
+	// Override and customize requests to change font in order to apply MMD syntax
+	if (fontDebug)
+		NSLog(@"change font");
+	
+	// See what was requested by comparing old and new fonts
+	NSFont *currentFont = [textView font];
+ 	NSFont *newFont = [sender convertFont:currentFont];
+
+	NSFontTraitMask new = [[NSFontManager sharedFontManager] traitsOfFont:newFont];
+	NSFontTraitMask old = [[NSFontManager sharedFontManager] traitsOfFont:currentFont];
+	
+	NSFontTraitMask changed = new ^ old;
+	if (!changed)
+	{
+		// It's not a simple change, so need to figure out exactly font change was requested
+		if (fontDebug)
+			NSLog(@"complex request");
+		
+		currentFont = [[NSFontManager sharedFontManager] convertFont:currentFont toHaveTrait:NSBoldFontMask];
+		currentFont = [[NSFontManager sharedFontManager] convertFont:currentFont toHaveTrait:NSItalicFontMask];
+		
+		newFont = [sender convertFont:currentFont];
+		
+		new = [[NSFontManager sharedFontManager] traitsOfFont:newFont];
+		old = [[NSFontManager sharedFontManager] traitsOfFont:currentFont];
+		
+		changed = new ^ old;
+		
+	}
+	
+	if ( changed & NSBoldFontMask) {
+		if (fontDebug)
+			NSLog(@"change bold");
+		if (new & NSBoldFontMask) {
+			// TODO: Check for wrapping '**'and unbold instead if present
+			if (fontDebug)
+				NSLog(@"add bold");
+			[self addBoldToRange:[textView rangeForUserTextChange]];
+		} else {
+			if (fontDebug)
+				NSLog(@"remove bold");
+			[self removeBoldFromRange:[textView rangeForUserTextChange]];
+		}
+	}
+
+	if ( changed & NSItalicFontMask) {
+		if (fontDebug)
+			NSLog(@"change italics");
+		if (new & NSItalicFontMask) {
+			// TODO: Check for wrapping '*' and unitalicize instead if present
+			if (fontDebug)
+				NSLog(@"add italics");
+			[self addItalicsToRange:[textView rangeForUserTextChange]];
+		} else {
+			if (fontDebug)
+				NSLog(@"remove italics");
+			[self removeItalicsFromRange:[textView rangeForUserTextChange]];
+		}
+	}
+	
+	if ( !(changed & ( NSItalicFontMask | NSBoldFontMask) )) {
+		// doesn't look like a bold/italics request, so forward on
+		NSLog(@"do something else");
+		[textView changeFont:sender];
+		return;
+	}
+	
+	// Just pass on request for now
+	//[textView changeFont:sender];
+
+	return;
+}
+
+- (void)addItalicsToRange:(NSRange)range
+{
+	// Apply Italics to the current range
+	if (range.length == 0){
+		[[textView textStorage] replaceCharactersInRange:range
+											  withString:@"*"];
+	} else {
+		[self wrapRange:range prefix:@"*" suffix:@"*"];
+	}
+	
+	// Strip out prior italics inside the range
+	NSRange trimmed = [textView selectedRange];
+	
+	NSMutableString *replacementString = [NSMutableString stringWithString:[[[textView textStorage] string] substringWithRange:trimmed]];
+
+	// Preserve Bold
+	[replacementString replaceOccurrencesOfString:@"**" 
+									   withString:@"MMD-BOLD" 
+										  options:0		
+											range:NSMakeRange(0,[replacementString length])];
+
+	// Strip italics
+	[replacementString replaceOccurrencesOfString:@"*" 
+									   withString:@"" 
+										  options:0		
+											range:NSMakeRange(0,[replacementString length])];
+
+	// Replace Bold
+	[replacementString replaceOccurrencesOfString:@"MMD-BOLD" 
+									   withString:@"**" 
+										  options:0		
+											range:NSMakeRange(0,[replacementString length])];
+	
+	[[textView textStorage] replaceCharactersInRange:trimmed withString:replacementString];
+	
+	// Recalculate selected range and restore
+	[textView setSelectedRange:NSMakeRange(trimmed.location, [replacementString length])];
+	[hl parseAndHighlightNow];
+}
+
+- (void)addBoldToRange:(NSRange)range
+{
+	// Apply Bold to the current range
+	if (range.length == 0){
+		[[textView textStorage] replaceCharactersInRange:range
+											  withString:@"**"];
+	} else {
+		[self wrapRange:range prefix:@"**" suffix:@"**"];
+	}
+
+	// Strip out prior bold inside the range
+	NSRange trimmed = [textView selectedRange];
+	
+	NSMutableString *replacementString = [NSMutableString stringWithString:[[[textView textStorage] string] substringWithRange:trimmed]];
+	[replacementString replaceOccurrencesOfString:@"**" 
+									   withString:@"" 
+										  options:0		
+											range:NSMakeRange(0,[replacementString length])];
+	
+	[[textView textStorage] replaceCharactersInRange:trimmed withString:replacementString];
+
+	// Recalculate selected range and restore
+	[textView setSelectedRange:NSMakeRange(trimmed.location, [replacementString length])];
+	[hl parseAndHighlightNow];
+}
+
+- (void)removeBoldFromRange:(NSRange)range
+{
+	// Remove bold from the current range if possible
+	if (range.length == 0){
+		// nothing selected, not sure what to do here?
+	} else {
+		[self removeWrapFromRange:range prefix:@"**" suffix:@"**"];
+	}
+	[hl parseAndHighlightNow];
+
+	return;
+}
+
+- (void)removeItalicsFromRange:(NSRange)range
+{
+	// Remove bold from the current range if possible
+	if (range.length == 0){
+		// nothing selected, not sure what to do here?
+	} else {
+		[self removeWrapFromRange:range prefix:@"*" suffix:@"*"];
+	}
+	[hl parseAndHighlightNow];
+	
+	return;
+}
+
+- (void)wrapRange:(NSRange)range prefix:(NSString *) prefix suffix:(NSString*) suffix
+{
+	// Trim leading and following whitespace from selection, then wrap in specified strings
+	
+	NSRange trimmed = [self trimSpaceOrFontMarkersFromRange:range];
+	
+	// Only select the part we're interested in
+	[textView setSelectedRange:trimmed];
+	
+	
+	[[textView textStorage] replaceCharactersInRange:NSMakeRange(trimmed.location+trimmed.length, 0)
+										  withString:suffix];
+
+	[[textView textStorage] replaceCharactersInRange:NSMakeRange(trimmed.location, 0)
+										  withString:prefix];
+	
+}
+
+
+- (void)removeWrapFromRange:(NSRange)range prefix:(NSString *) prefix suffix:(NSString*) suffix
+{
+	// Remove suffix
+	if ( [suffix isEqualToString:[[[textView textStorage] string] 
+								  substringWithRange:NSMakeRange(range.location+range.length, [suffix length])] ])
+	{
+		[[textView textStorage] replaceCharactersInRange:NSMakeRange(range.location+range.length, [suffix length])
+											  withString:@""];
+	}
+	
+	// Remove suffix
+	if ( [prefix isEqualToString:[[[textView textStorage] string] 
+								  substringWithRange:NSMakeRange(range.location-[prefix length], [prefix length])] ])
+	{
+		[[textView textStorage] replaceCharactersInRange:NSMakeRange(range.location-[prefix length], [prefix length])
+											  withString:@""];
+	}
+	
+}
+
+
+- (NSRange)trimSpaceFromRange:(NSRange)range
+{
+	// given a range,return the range without any wrapping whitespace
+	
+	return [self trimCharactersInString:@" \t\r\n" FromRange:range];
+}
+
+- (NSRange)trimSpaceOrFontMarkersFromRange:(NSRange)range
+{
+	return [self trimCharactersInString:@"* \t\r\n" FromRange:range];
+}
+
+- (NSRange)trimFontMarkersFromRange:(NSRange)range
+{
+	return [self trimCharactersInString:@"*" FromRange:range];
+}
+
+- (NSRange)trimCharactersInString:(NSString *)characterString FromRange:(NSRange)range
+{
+	// given a range,return the range without any specified characters at begin/end
+	
+	NSRange start = [[[textView textStorage] string] rangeOfCharacterFromSet:[[NSCharacterSet characterSetWithCharactersInString:characterString] invertedSet] 
+																	 options:0
+																	   range:range];
+	start.length = 0;
+	
+	NSRange end = [[[textView textStorage] string] rangeOfCharacterFromSet:[[NSCharacterSet characterSetWithCharactersInString:characterString] invertedSet]
+																   options:NSBackwardsSearch
+																	 range:range];
+	end.length = 0;
+	end.location += 1;
+	
+	NSRange result = NSMakeRange(start.location, end.location-start.location);
+	return result;
+}
+
 
 
 @end

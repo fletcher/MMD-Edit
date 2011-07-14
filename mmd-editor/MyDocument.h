@@ -39,6 +39,23 @@
 
 - (void) handleStyleParsingErrors:(NSArray *)errorMessages;
 
+
+- (void)myChangeFont:(id)sender;
+
+- (void)addItalicsToRange:(NSRange)range;
+- (void)removeItalicsFromRange:(NSRange)range;
+
+- (void)addBoldToRange:(NSRange)range;
+- (void)removeBoldFromRange:(NSRange)range;
+
+- (void)wrapRange:(NSRange)range prefix:(NSString *) prefix suffix:(NSString *) suffix;
+- (void)removeWrapFromRange:(NSRange)range prefix:(NSString *) prefix suffix:(NSString*) suffix;
+
+- (NSRange)trimSpaceFromRange:(NSRange)range;
+- (NSRange)trimSpaceOrFontMarkersFromRange:(NSRange)range;
+- (NSRange)trimCharactersInString:(NSString *)characterString FromRange:(NSRange)range;
+
+
 @property BOOL isMMD;
 
 @end
