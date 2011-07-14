@@ -58,6 +58,9 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
 	[self populateStylesPopUpButton];
+	
+	// Allow MyDocument to intercept requests to change font styling
+	[[NSFontManager sharedFontManager] setAction:@selector(myChangeFont:)];
 }
 
 
