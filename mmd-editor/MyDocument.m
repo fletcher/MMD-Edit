@@ -405,38 +405,39 @@
 	// Apply Italics to the current range
 	if (range.length == 0){
 		[[textView textStorage] replaceCharactersInRange:range
-											  withString:@"*"];
+											  withString:@"**"];
+		[textView setSelectedRange:NSMakeRange(range.location+1, 0)];
 	} else {
 		[self wrapRange:range prefix:@"*" suffix:@"*"];
+	
+		// Strip out prior italics inside the range
+		NSRange trimmed = [textView selectedRange];
+		
+		NSMutableString *replacementString = [NSMutableString stringWithString:[[[textView textStorage] string] substringWithRange:trimmed]];
+
+		// Preserve Bold
+		[replacementString replaceOccurrencesOfString:@"**" 
+										   withString:@"MMD-BOLD" 
+											  options:0		
+												range:NSMakeRange(0,[replacementString length])];
+
+		// Strip italics
+		[replacementString replaceOccurrencesOfString:@"*" 
+										   withString:@"" 
+											  options:0		
+												range:NSMakeRange(0,[replacementString length])];
+
+		// Replace Bold
+		[replacementString replaceOccurrencesOfString:@"MMD-BOLD" 
+										   withString:@"**" 
+											  options:0		
+												range:NSMakeRange(0,[replacementString length])];
+		
+		[[textView textStorage] replaceCharactersInRange:trimmed withString:replacementString];
+		// Recalculate selected range and restore
+		[textView setSelectedRange:NSMakeRange(trimmed.location, [replacementString length])];
 	}
-	
-	// Strip out prior italics inside the range
-	NSRange trimmed = [textView selectedRange];
-	
-	NSMutableString *replacementString = [NSMutableString stringWithString:[[[textView textStorage] string] substringWithRange:trimmed]];
-
-	// Preserve Bold
-	[replacementString replaceOccurrencesOfString:@"**" 
-									   withString:@"MMD-BOLD" 
-										  options:0		
-											range:NSMakeRange(0,[replacementString length])];
-
-	// Strip italics
-	[replacementString replaceOccurrencesOfString:@"*" 
-									   withString:@"" 
-										  options:0		
-											range:NSMakeRange(0,[replacementString length])];
-
-	// Replace Bold
-	[replacementString replaceOccurrencesOfString:@"MMD-BOLD" 
-									   withString:@"**" 
-										  options:0		
-											range:NSMakeRange(0,[replacementString length])];
-	
-	[[textView textStorage] replaceCharactersInRange:trimmed withString:replacementString];
-	
-	// Recalculate selected range and restore
-	[textView setSelectedRange:NSMakeRange(trimmed.location, [replacementString length])];
+		 
 	[hl parseAndHighlightNow];
 }
 
@@ -445,24 +446,25 @@
 	// Apply Bold to the current range
 	if (range.length == 0){
 		[[textView textStorage] replaceCharactersInRange:range
-											  withString:@"**"];
+											  withString:@"****"];
+		[textView setSelectedRange:NSMakeRange(range.location+2, 0)];
 	} else {
 		[self wrapRange:range prefix:@"**" suffix:@"**"];
+
+		// Strip out prior bold inside the range
+		NSRange trimmed = [textView selectedRange];
+		
+		NSMutableString *replacementString = [NSMutableString stringWithString:[[[textView textStorage] string] substringWithRange:trimmed]];
+		[replacementString replaceOccurrencesOfString:@"**" 
+										   withString:@"" 
+											  options:0		
+												range:NSMakeRange(0,[replacementString length])];
+		
+		[[textView textStorage] replaceCharactersInRange:trimmed withString:replacementString];
+
+		// Recalculate selected range and restore
+		[textView setSelectedRange:NSMakeRange(trimmed.location, [replacementString length])];
 	}
-
-	// Strip out prior bold inside the range
-	NSRange trimmed = [textView selectedRange];
-	
-	NSMutableString *replacementString = [NSMutableString stringWithString:[[[textView textStorage] string] substringWithRange:trimmed]];
-	[replacementString replaceOccurrencesOfString:@"**" 
-									   withString:@"" 
-										  options:0		
-											range:NSMakeRange(0,[replacementString length])];
-	
-	[[textView textStorage] replaceCharactersInRange:trimmed withString:replacementString];
-
-	// Recalculate selected range and restore
-	[textView setSelectedRange:NSMakeRange(trimmed.location, [replacementString length])];
 	[hl parseAndHighlightNow];
 }
 
@@ -567,7 +569,6 @@
 	NSRange result = NSMakeRange(start.location, end.location-start.location);
 	return result;
 }
-
 
 
 @end
