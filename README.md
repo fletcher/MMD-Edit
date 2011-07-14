@@ -1,6 +1,12 @@
+Title:	MMD-Editor Readme
+Author:	FletcherT. Penney
+Date:	July 14, 2011
+
+
+
 # MMD-Editor #
 
-This project creates a Mac OS X text editor that performs syntax-highlighting for MultiMarkdown documents.
+This project is a Mac OS X text editor that performs syntax-highlighting for MultiMarkdown documents, as well as implements various features to make authoring and editing MMD documents easier and faster.
 
 It based on work by Ali Rantakari:
 
@@ -16,7 +22,7 @@ It uses a PEG grammar based on that from MultiMarkdown (aka [peg-multimarkdown](
 
 ## Status ##
 
-This is very much a work in progress --- it matches the basic Markdown syntax, and I am adding in support for MMD specific features. Short of editing the code, there is no way (yet) to change the colors, fonts, etc.
+This is very much a work in progress --- it matches the basic Markdown syntax, and I am adding in support for MMD specific features.
 
 Currently, this app is more "proof of concept" than finished project.  It works well in my tests, but there are a few glitches now and then.
 
@@ -29,6 +35,10 @@ Current Features:
 * automatically align metadata values
 
 * automatically format basic tables and use tabs for proper alignment
+
+* Use the usual "Bold" and "Italic" commands to insert the appropriate Markdown syntax, e.g. `**foo**` and `*bar*`
+
+* Smart insertion/pairing of "[]", "()", "``", and double quotes
 
 * support for user style sheets in `~/Library/Application Support/MMD-Edit/Styles`
 
@@ -81,3 +91,10 @@ I welcome contributions from other developers to help improve this application. 
 A compiled (though likely out of date) binary is available for download:
 
 <https://github.com/fletcher/MMD-Editor/downloads>
+
+
+## Tips for Use ##
+
+* If you want to remove multiple bold/italic spans at once, you can select the entire paragraph, and then add and remove bold and italics.  The act of adding bold removes and bold spans within the selected text (and same for italics).
+
+
