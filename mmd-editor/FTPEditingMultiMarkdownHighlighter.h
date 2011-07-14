@@ -12,5 +12,7 @@
 
 }
 
+- (void)insertNewlineAtRange:(NSRange) range;
+- (BOOL)itemIsInsideElementType:(int)elementType range:(NSRange)range;
 
 @end
