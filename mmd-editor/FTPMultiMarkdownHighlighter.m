@@ -4,6 +4,7 @@
 //  Created by Fletcher T. Penney on 7/9/11.
 //  Copyright 2011 Fletcher T. Penney. All rights reserved.
 //
+// Expands on HGMarkdownHighlighter by adding MultiMarkdown Support
 
 #import "FTPMultiMarkdownHighlighter.h"
 #import "HGMarkdownHighlightingStyle.h"
@@ -649,21 +650,22 @@
 {
 	// We're about to add a string, so let's see if we need to intervene
 
+	
+	// Handle newlines separately
+	if ([replacementString isEqualToString:@"\n"]){
+		
 	if ([replacementString isEqualToString:@"`"]) {
 		if ( ( [[[view textStorage] string] length] > range.location)
 			&& [[[[view textStorage] string]substringWithRange:NSMakeRange(range.location, 1)] isEqualToString:@"`"]) {
 			// the next character is also `, so replace instead
 			[[view textStorage] replaceCharactersInRange:NSMakeRange(range.location, 1) withString:@""];
-			return YES;
 		}
 		if (range.length == 0) {
 			// Close after cursor
 			[[view textStorage] replaceCharactersInRange:NSMakeRange(range.location, 0) withString:@"`"];
 			[view setSelectedRange:range];
-			  return YES;
-		} else {
-			return YES;
 		}
+		return YES;
 	}
 
 	if ([replacementString isEqualToString:@"\""]) {
@@ -671,16 +673,13 @@
 			&& [[[[view textStorage] string]substringWithRange:NSMakeRange(range.location, 1)] isEqualToString:@"\""]) {
 			// the next character is also ", so replace instead
 			[[view textStorage] replaceCharactersInRange:NSMakeRange(range.location, 1) withString:@""];
-			return YES;
 		}
 		if (range.length == 0) {
 			// Close after cursor
 			[[view textStorage] replaceCharactersInRange:NSMakeRange(range.location, 0) withString:@"\""];
 			[view setSelectedRange:range];
-			return YES;
-		} else {
-			return YES;
 		}
+		return YES;
 	}
 	
 	if ([replacementString isEqualToString:@"["]) {
@@ -729,8 +728,8 @@
 			&& [[[[view textStorage] string]substringWithRange:NSMakeRange(range.location, 1)] isEqualToString:@"*"]) {
 			// the next character is also *, so replace instead
 			[[view textStorage] replaceCharactersInRange:NSMakeRange(range.location, 1) withString:@""];
-			return YES;
 		}
+		return YES;
 	}
 	
 	
