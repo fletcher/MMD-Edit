@@ -8,7 +8,7 @@
 
 #import "MyDocument.h"
 #import "HGMarkdownHighlightingStyle.h"
-#import "FTPMultiMarkdownHighlighter.h"
+#import "FTPEditingMultiMarkdownHighlighter.h"
 
 @implementation MyDocument
 
@@ -94,7 +94,7 @@
 		[[textView textStorage] setAttributedString: [self string]];
 		[textView setFont:[NSFont fontWithName:@"palatino" size:13]];
 		
-		hl = [[FTPMultiMarkdownHighlighter alloc] init];
+		hl = [[FTPEditingMultiMarkdownHighlighter alloc] init];
 		hl.targetTextView = textView;
 		hl.parseAndHighlightAutomatically = YES;
 		hl.waitInterval = 0.3;

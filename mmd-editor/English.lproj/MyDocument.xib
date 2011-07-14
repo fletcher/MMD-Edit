@@ -189,6 +189,7 @@
 									</object>
 									<string key="NSFrame">{{1, 1}, {684, 371}}</string>
 									<reference key="NSSuperview" ref="453368042"/>
+									<reference key="NSNextKeyView" ref="661041945"/>
 									<int key="NSViewLayerContentsRedrawPolicy">2</int>
 									<reference key="NSDocView" ref="661041945"/>
 									<reference key="NSBGColor" ref="136520349"/>
@@ -224,6 +225,7 @@
 							</object>
 							<string key="NSFrame">{{0, 42}, {686, 373}}</string>
 							<reference key="NSSuperview" ref="568628114"/>
+							<reference key="NSNextKeyView" ref="605090761"/>
 							<int key="NSViewLayerContentsRedrawPolicy">2</int>
 							<int key="NSsFlags">562</int>
 							<reference key="NSVScroller" ref="267764040"/>
@@ -273,7 +275,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomObject" id="892134846">
-				<string key="NSClassName">FTPMultiMarkdownHighlighter</string>
+				<string key="NSClassName">FTPEditingMultiMarkdownHighlighter</string>
 			</object>
 			<object class="NSWindowTemplate" id="221736679">
 				<int key="NSWindowStyleMask">31</int>
@@ -656,6 +658,14 @@
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">FTPEditingMultiMarkdownHighlighter</string>
+					<string key="superclassName">FTPMultiMarkdownHighlighter</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../../../Active/MMD-Editor/mmd-editor/FTPEditingMultiMarkdownHighlighter.h</string>
+					</object>
+				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">FTPMultiMarkdownHighlighter</string>
 					<string key="superclassName">HGMarkdownHighlighter</string>
