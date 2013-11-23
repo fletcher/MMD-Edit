@@ -1,8 +1,18 @@
 Title:	MMD-Editor Readme
-Author:	FletcherT. Penney
-Date:	July 14, 2011
+Author:	Fletcher T. Penney
 
 
+# Update #
+
+Huh.  I thought I updated this long ago, but obviously not.  This project is left on github as a demonstration.  That said, however, the real project became [MultiMarkdown Composer](http://multimarkdown.com/), which is a commercial application.  MMD Composer 2.0 was a huge rewrite, fixing all the problems that existed with the approach used here in MMD-Edit (which formed the basis for Composer v1.)
+
+You are welcome to use this code, subject to the license.  But I don't recommend it.  There are other applications that have been built with the same approach used here (I'm not saying they used my code).  They seem to suffer from the same problems as this code.  They will eventually figure it out and rewrite, much as I did over a year ago.
+
+There are better ways.  Don't use this.
+
+:)
+
+> Fletcher T. Penney --- 11/22/2013
 
 # MMD-Editor #
 
